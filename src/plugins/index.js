@@ -8,7 +8,15 @@
 import vuetify from "./vuetify";
 import pinia from "../store";
 import router from "../router";
+import { watch } from "vue";
 
 export function registerPlugins(app) {
   app.use(vuetify).use(router).use(pinia);
+  watch(
+    pinia.state,
+    (state) => {
+      localStorage.setItem("peacState", JSON.stringify(state));
+    },
+    { deep: true },
+  );
 }
