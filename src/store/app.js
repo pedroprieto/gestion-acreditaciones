@@ -7,6 +7,11 @@ export const useAppStore = defineStore("app", {
       let estado = JSON.parse(localStorage.getItem("peacState")).app;
       return estado;
     }
-    return { test: 10 };
+    return {
+      info: {},
+      candidates: [],
+      sessions: [],
+      activities: [],
+    };
   },
 });
