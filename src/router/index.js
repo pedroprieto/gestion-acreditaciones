@@ -28,6 +28,17 @@ const routes = [
           import(/* webpackChunkName: "home" */ "@/views/MyDataView.vue"),
         props: true,
       },
+      {
+        path: "/candidates",
+        name: "candidates",
+        meta: {
+          mainMenu: true,
+          prompt: "Candidatos",
+        },
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/CandidatesView.vue"),
+        props: true,
+      },
     ],
   },
 ];
