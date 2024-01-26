@@ -34,5 +34,36 @@ export const useAppStore = defineStore("app", {
       let c = Object.assign({ id: uuidv4(), active: true }, candidateData);
       this.candidates.push(c);
     },
+    deleteSession(session) {
+      this.sessions.splice(this.sessions.indexOf(session), 1);
+    },
+    createSession(sessionData) {
+      let c = Object.assign({ id: uuidv4(), active: true }, sessionData);
+      this.sessions.push(c);
+    },
+    getSessionById(sessionId) {
+      return this.sessions.find((s) => s.id == sessionId);
+    },
+    listAllCandidates() {
+      return this.candidates;
+    },
+    listActiveCandidates() {
+      return this.candidates.filter((c) => c.active == true);
+    },
+    listActiveCandidatesFullNamesIds() {
+      return this.listActiveCandidates().map((c) => {
+        return { fullName: `${c.name} ${c.familyName}`, id: c.id };
+      });
+    },
+    createActivity(activityData, sessionId) {
+      let c = Object.assign({ id: uuidv4(), sessionId }, activityData);
+      this.activities.push(c);
+    },
+    listActivitiesBySession(sessionId) {
+      return this.activities.filter((a) => a.sessionId == sessionId);
+    },
+    deleteActivity(activity) {
+      this.activities.splice(this.activities.indexOf(activity), 1);
+    },
   },
 });

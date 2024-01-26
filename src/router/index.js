@@ -39,6 +39,27 @@ const routes = [
           import(/* webpackChunkName: "home" */ "@/views/CandidatesView.vue"),
         props: true,
       },
+      {
+        path: "/sessions",
+        name: "sessions",
+        meta: {
+          mainMenu: true,
+          prompt: "Sesiones",
+        },
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/SessionsView.vue"),
+        props: true,
+      },
+      {
+        path: "/sessions/:session",
+        name: "session",
+        meta: {
+          prompt: "Sesión",
+        },
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/SessionView.vue"),
+        props: true,
+      },
     ],
   },
 ];
