@@ -128,6 +128,9 @@
         <template v-slot:no-data> No hay candidatos </template>
       </v-data-table>
     </v-row>
+    <v-snackbar color="error" elevation="24" v-model="snackbar" timeout="2000">
+      {{ textSnackbar }}
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -144,9 +147,11 @@ let dialogDelete = ref(false);
 let text = ref("");
 let search = ref("");
 let hide = ref(true);
+let snackbar = ref(false);
 
 let editedElement = null;
 let formTitle;
+let textSnackbar = "";
 let headers = [
   {
     align: "start",
@@ -171,7 +176,7 @@ let rules = {
 };
 
 const filteredCandidates = computed(() => {
-  if (hide.value) return store.candidates.filter((c) => c.active == true);
+  if (hide.value) return store.listActiveCandidates();
 
   return store.candidates;
 });
@@ -181,7 +186,12 @@ function createCandidate() {
     if (editedElement) {
       Object.assign(editedElement, newUser.value);
     } else {
-      store.createCandidate(newUser.value);
+      try {
+        store.createCandidate(newUser.value);
+      } catch (e) {
+        snackbar.value = true;
+        textSnackbar = e.message;
+      }
     }
     close();
   }
