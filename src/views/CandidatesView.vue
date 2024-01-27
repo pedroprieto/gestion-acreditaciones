@@ -45,6 +45,12 @@
                         label="NIF"
                         v-model="newUser.nif"
                       ></v-text-field>
+                      <v-select
+                        label="Etapa"
+                        :rules="[rules.required]"
+                        :items="store.stages"
+                        v-model="newUser.stage"
+                      ></v-select>
                       <v-text-field
                         :rules="[rules.required]"
                         label="Nombre"
@@ -99,6 +105,10 @@
             </v-dialog>
           </v-toolbar>
         </template>
+        <template v-slot:item.stage="{ value }">
+          {{ store.getStageTitleByValue(value) }}
+        </template>
+
         <template v-slot:item.UCs="{ item }">
           <v-icon size="large" class="me-2" @click="navToUCs(item)">
             mdi-format-list-bulleted
@@ -167,6 +177,7 @@ let headers = [
     sortable: false,
     title: "NIF",
   },
+  { key: "stage", title: "Etapa" },
   { key: "name", title: "Nombre" },
   { key: "familyName", title: "Apellidos" },
   { key: "phone", title: "Teléfono", sortable: false },

@@ -4,20 +4,33 @@ import { v4 as uuidv4 } from "uuid";
 
 export const useAppStore = defineStore("app", {
   state: () => {
+    let stages = [
+      { title: "Asesoramiento (+Pre)", value: 1 },
+      { title: "Evaluación", value: 2 },
+    ];
+
+    let estado;
+
     if (localStorage.getItem("peacState")) {
-      let estado = JSON.parse(localStorage.getItem("peacState")).app;
-      return estado;
+      estado = JSON.parse(localStorage.getItem("peacState")).app;
+    } else {
+      estado = {
+        info: {},
+        candidates: [],
+        sessions: [],
+        activities: [],
+        UCs: [],
+        UCsAsesorables: [],
+      };
     }
-    return {
-      info: {},
-      candidates: [],
-      sessions: [],
-      activities: [],
-      UCs: [],
-      UCsAsesorables: [],
-    };
+
+    estado.stages = stages;
+    return estado;
   },
   actions: {
+    getStageTitleByValue(value) {
+      return this.stages.find((el) => el.value == value).title;
+    },
     deleteCandidate(candidate) {
       this.candidates.splice(this.candidates.indexOf(candidate), 1);
     },
@@ -33,7 +46,13 @@ export const useAppStore = defineStore("app", {
         err.message = "Ya existe un candidato con este NIF";
         throw err;
       }
-      let c = Object.assign({ id: uuidv4(), active: true }, candidateData);
+      let c = Object.assign(
+        {
+          id: uuidv4(),
+          active: true,
+        },
+        candidateData,
+      );
       this.candidates.push(c);
     },
     deleteSession(session) {
