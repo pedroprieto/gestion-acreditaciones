@@ -51,6 +51,19 @@ const routes = [
         props: true,
       },
       {
+        path: "/ucsasesorables",
+        name: "UCsAsesorables",
+        meta: {
+          mainMenu: true,
+          prompt: "UCs asesorables",
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "home" */ "@/views/UCsAsesorablesView.vue"
+          ),
+        props: true,
+      },
+      {
         path: "/sessions/:session",
         name: "session",
         meta: {

@@ -4,14 +4,11 @@
       <v-data-table
         :search="search"
         :headers="headers"
-        :items="store.listUCsByCandidateId(candidate)"
+        :items="store.listUCsAsesorables()"
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>
-              UCs del candidato {{ candidateData.name }} -
-              {{ candidateData.familyName }}
-            </v-toolbar-title>
+            <v-toolbar-title> UCs asesorables / evaluables </v-toolbar-title>
             <v-text-field
               v-model="search"
               label="Buscar"
@@ -38,13 +35,14 @@
                 <v-card-text>
                   <v-container>
                     <v-form @submit.prevent="createUC()" v-model="valid">
-                      <v-autocomplete
-                        label="UC"
-                        v-model="newUCId"
-                        item-title="fullName"
-                        item-value="id"
-                        :items="store.listUCsAsesorablesFullNamesIds()"
-                      ></v-autocomplete>
+                      <v-text-field
+                        label="Código UC"
+                        v-model="newUC.code"
+                      ></v-text-field>
+                      <v-textarea
+                        v-model="newUC.name"
+                        label="Nombre de la UC"
+                      ></v-textarea>
 
                       <v-btn class="me-4" :type="submit" color="primary"
                         >Enviar</v-btn
@@ -94,14 +92,10 @@
 </template>
 
 <script setup>
-const props = defineProps(["candidate"]);
-
 import { ref, nextTick, computed } from "vue";
 import { useAppStore } from "../store/app";
 
 const store = useAppStore();
-
-let candidateData = store.getCandidateById(props.candidate);
 
 let newUC = ref({});
 let valid = ref(false);
@@ -109,7 +103,6 @@ let dialog = ref(false);
 let dialogDelete = ref(false);
 let search = ref("");
 let hide = ref(true);
-let newUCId = ref("");
 
 let editedElement = null;
 let formTitle;
@@ -129,13 +122,10 @@ let rules = {
 
 function createUC() {
   if (valid.value) {
-    let UCData = store.getUCAsesorableById(newUCId.value);
-    newUC.value.code = UCData.code;
-    newUC.value.name = UCData.name;
     if (editedElement) {
       Object.assign(editedElement, newUC.value);
     } else {
-      store.createUC(newUC.value, props.candidate);
+      store.createUCAsesorable(newUC.value);
     }
     close();
   }

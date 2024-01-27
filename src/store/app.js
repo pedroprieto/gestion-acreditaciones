@@ -14,6 +14,7 @@ export const useAppStore = defineStore("app", {
       sessions: [],
       activities: [],
       UCs: [],
+      UCsAsesorables: [],
     };
   },
   actions: {
@@ -82,6 +83,26 @@ export const useAppStore = defineStore("app", {
     },
     deleteUC(UC) {
       this.UCs.splice(this.UCs.indexOf(UC), 1);
+    },
+    createUCAsesorable(UCData) {
+      let c = Object.assign(
+        {
+          id: uuidv4(),
+        },
+        UCData,
+      );
+      this.UCsAsesorables.push(c);
+    },
+    listUCsAsesorables() {
+      return this.UCsAsesorables;
+    },
+    getUCAsesorableById(UCId) {
+      return this.UCsAsesorables.find((uc) => uc.id == UCId);
+    },
+    listUCsAsesorablesFullNamesIds() {
+      return this.listUCsAsesorables().map((uc) => {
+        return { fullName: `${uc.code} ${uc.name}`, id: uc.id };
+      });
     },
   },
 });
