@@ -5,8 +5,14 @@ import { v4 as uuidv4 } from "uuid";
 export const useAppStore = defineStore("app", {
   state: () => {
     let stages = [
-      { title: "Asesoramiento (+Pre)", value: 1 },
-      { title: "Evaluación", value: 2 },
+      { title: "Asesoramiento (+Pre)", value: 20 },
+      { title: "Evaluación", value: 30 },
+    ];
+
+    let activityStages = [
+      { title: "Preasesoramiento", value: 10 },
+      { title: "Asesoramiento", value: 20 },
+      { title: "Evaluación", value: 30 },
     ];
 
     let estado;
@@ -25,6 +31,7 @@ export const useAppStore = defineStore("app", {
     }
 
     estado.stages = stages;
+    estado.activityStages = activityStages;
     return estado;
   },
   actions: {
@@ -36,6 +43,10 @@ export const useAppStore = defineStore("app", {
     },
     getCandidateById(candidateId) {
       return this.candidates.find((c) => c.id == candidateId);
+    },
+    getCandidateFullNameById(candidateId) {
+      let c = this.candidates.find((c) => c.id == candidateId);
+      return `${c.name} ${c.familyName}`;
     },
     getCandidateByNIF(candidateNIF) {
       return this.candidates.find((c) => c.nif == candidateNIF);
@@ -122,6 +133,21 @@ export const useAppStore = defineStore("app", {
       return this.listUCsAsesorables().map((uc) => {
         return { fullName: `${uc.code} ${uc.name}`, id: uc.id };
       });
+    },
+    getActivityStageTitleByValue(value) {
+      return this.activityStages.find((el) => el.value == value).title;
+    },
+    getAvailableStagesByCandidateId(candidateId) {
+      let selectedCandidate = this.getCandidateById(candidateId);
+      if (selectedCandidate) {
+        if (selectedCandidate.stage == 20) {
+          return this.activityStages.filter((a) => a.value != 30);
+        } else {
+          return this.activityStages.filter((a) => a.value == 30);
+        }
+      } else {
+        return [];
+      }
     },
   },
 });

@@ -38,12 +38,20 @@
                   <v-container>
                     <v-form @submit.prevent="createActivity()" v-model="valid">
                       <v-autocomplete
-                        label="Autocomplete"
+                        label="Candidato"
                         v-model="newActivity.candidate"
                         item-title="fullName"
                         item-value="id"
                         :items="store.listActiveCandidatesFullNamesIds()"
                       ></v-autocomplete>
+
+                      <v-select
+                        label="Etapa"
+                        :rules="[rules.required]"
+                        v-model="newActivity.stage"
+                        :items="availableStages"
+                      ></v-select>
+
                       <v-textarea
                         v-model="newActivity.description"
                         label="Descripción"
@@ -81,6 +89,12 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
+        </template>
+        <template v-slot:item.candidate="{ value }">
+          {{ store.getCandidateFullNameById(value) }}
+        </template>
+        <template v-slot:item.stage="{ value }">
+          {{ store.getActivityStageTitleByValue(value) }}
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon size="small" class="me-2" @click="editItem(item)">
@@ -121,6 +135,7 @@ let headers = [
     key: "candidate",
     title: "Candidato",
   },
+  { key: "stage", title: "Etapa", sortable: false },
   { key: "description", title: "Descripción", sortable: false },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
@@ -128,6 +143,10 @@ let headers = [
 let rules = {
   required: (value) => !!value || "Obligatorio.",
 };
+
+const availableStages = computed(() => {
+  return store.getAvailableStagesByCandidateId(newActivity.value.candidate);
+});
 
 function createActivity() {
   if (valid.value) {
