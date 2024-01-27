@@ -13,6 +13,7 @@ export const useAppStore = defineStore("app", {
       candidates: [],
       sessions: [],
       activities: [],
+      UCs: [],
     };
   },
   actions: {
@@ -64,6 +65,23 @@ export const useAppStore = defineStore("app", {
     },
     deleteActivity(activity) {
       this.activities.splice(this.activities.indexOf(activity), 1);
+    },
+    createUC(UCData, candidateId) {
+      let c = Object.assign(
+        {
+          id: uuidv4(),
+          candidateId,
+          date: new Date().toISOString().substring(0, 10),
+        },
+        UCData,
+      );
+      this.UCs.push(c);
+    },
+    listUCsByCandidateId(candidateId) {
+      return this.UCs.filter((uc) => uc.candidateId == candidateId);
+    },
+    deleteUC(UC) {
+      this.UCs.splice(this.UCs.indexOf(UC), 1);
     },
   },
 });

@@ -60,6 +60,16 @@ const routes = [
           import(/* webpackChunkName: "home" */ "@/views/SessionView.vue"),
         props: true,
       },
+      {
+        path: "/candidates/:candidate",
+        name: "UCs",
+        meta: {
+          prompt: "UCs",
+        },
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/UCsView.vue"),
+        props: true,
+      },
     ],
   },
 ];
