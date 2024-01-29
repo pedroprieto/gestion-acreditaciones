@@ -2,6 +2,11 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 
+import Docxtemplater from "docxtemplater";
+import PizZip from "pizzip";
+import PizZipUtils from "pizzip/utils/index.js";
+import { saveAs } from "file-saver";
+
 export const useAppStore = defineStore("app", {
   state: () => {
     let stages = [
@@ -13,6 +18,22 @@ export const useAppStore = defineStore("app", {
       { title: "Preasesoramiento", value: 10 },
       { title: "Asesoramiento", value: 20 },
       { title: "Evaluación", value: 30 },
+    ];
+
+    let results = [
+      {
+        id: "FED",
+        description: "Favorable para contraste por evidencias directas",
+        stage: 20,
+      },
+      {
+        id: "FEI",
+        description: "Favorable para contraste por evidencias indirectas",
+        stage: 20,
+      },
+      { id: "D", description: "Desfavorable", stage: 20 },
+      { id: "A", description: "Adquirida", stage: 30 },
+      { id: "NA", description: "No adquirida", stage: 30 },
     ];
 
     let estado;
@@ -32,9 +53,13 @@ export const useAppStore = defineStore("app", {
 
     estado.stages = stages;
     estado.activityStages = activityStages;
+    estado.results = results;
     return estado;
   },
   actions: {
+    listResultsByStage(stageId) {
+      return this.results.filter((r) => r.stage == stageId);
+    },
     getStageTitleByValue(value) {
       return this.stages.find((el) => el.value == value).title;
     },
@@ -89,6 +114,8 @@ export const useAppStore = defineStore("app", {
     },
     createActivity(activityData, sessionId) {
       let c = Object.assign({ id: uuidv4(), sessionId }, activityData);
+      let session = this.getSessionById(sessionId);
+      c.date = session.date;
       this.activities.push(c);
     },
     listActivitiesBySession(sessionId) {
@@ -106,10 +133,24 @@ export const useAppStore = defineStore("app", {
         },
         UCData,
       );
+      c.qualys = c.qualys.split(",");
       this.UCs.push(c);
     },
     listUCsByCandidateId(candidateId) {
       return this.UCs.filter((uc) => uc.candidateId == candidateId);
+    },
+    groupUCsByQualy(UCs) {
+      return UCs.reduce((acc, UC) => {
+        for (let qualy of UC.qualys) {
+          let q = acc.find((el) => el.name == qualy);
+          if (!q) {
+            q = { name: qualy, UCs: [] };
+            acc.push(q);
+          }
+          q.UCs.push(UC);
+        }
+        return acc;
+      }, []);
     },
     deleteUC(UC) {
       this.UCs.splice(this.UCs.indexOf(UC), 1);
@@ -148,6 +189,60 @@ export const useAppStore = defineStore("app", {
       } else {
         return [];
       }
+    },
+
+    generarCertificados(tipo, candidate) {
+      let url = `${import.meta.env.BASE_URL}office_templates/${tipo}.docx`;
+      var generation_date = new Date().toLocaleDateString("es");
+
+      let candidateFullName = `${candidate.name} ${candidate.familyName}`;
+      PizZipUtils.getBinaryContent(url, (err, content) => {
+        const zip = new PizZip(content);
+        const doc = new Docxtemplater(zip, {
+          paragraphLoop: true,
+          linebreaks: true,
+        });
+
+        let activities = this.activities
+          .filter((ac) => ac.candidate == candidate.id)
+          .map((ac) => ({
+            stage: this.getActivityStageTitleByValue(ac.stage),
+            date: new Date(ac.date).toLocaleDateString(),
+            withCandidate: ac.withCandidate ? "Sí" : "No",
+            inPerson: ac.inPerson ? "Sí" : "No",
+            km: ac.km || "-",
+          }));
+
+        let candidateUCs = this.listUCsByCandidateId(candidate.id);
+        let candidateQualys = this.groupUCsByQualy(candidateUCs);
+        let UCsPass = candidateUCs.filter((uc) => uc.result != "D");
+        let UCsFail = candidateUCs.filter((uc) => uc.result == "D");
+        doc.setData({
+          qualifications: candidateQualys,
+          generation_date: generation_date,
+          candidateFullName,
+          activities,
+          asesorRole: this.getStageTitleByValue(candidate.stage),
+          asesorFullName: `${this.info.name} ${this.info.familyName}`,
+          endDate: new Date().toLocaleDateString(),
+          familiaProfesional: this.info.familiaProfesional,
+          UCs: candidateUCs,
+          city: this.info.city,
+          sede: this.info.sede,
+          UCsPass,
+          UCsFail,
+          hasUCsPass: UCsPass.length > 0,
+          hasUCsFail: UCsFail.length > 0,
+        });
+        doc.render();
+        const out = doc.getZip().generate({
+          type: "blob",
+          mimeType:
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
+        // Output the document using Data-URI
+        saveAs(out, `${tipo}-${candidate.familyName}_${candidate.name}.docx`);
+      });
     },
   },
 });

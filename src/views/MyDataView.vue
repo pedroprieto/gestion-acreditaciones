@@ -17,7 +17,7 @@
         <div class="control">
           <input
             required
-            v-model="store.info.surname"
+            v-model="store.info.familyName"
             id="surname"
             class="input"
             type="text"
@@ -33,6 +33,36 @@
             class="input"
             type="text"
             placeholder="NIF"
+          />
+        </div>
+        <div class="control">
+          <input
+            required
+            v-model="store.info.city"
+            id="city"
+            class="input"
+            type="text"
+            placeholder="Ciudad"
+          />
+        </div>
+        <div class="control">
+          <input
+            required
+            v-model="store.info.familiaProfesional"
+            id="familiaProfesional"
+            class="input"
+            type="text"
+            placeholder="Familia profesional"
+          />
+        </div>
+        <div class="control">
+          <input
+            required
+            v-model="store.info.sede"
+            id="sede"
+            class="input"
+            type="text"
+            placeholder="Sede"
           />
         </div>
       </div>

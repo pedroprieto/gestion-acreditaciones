@@ -43,6 +43,10 @@
                         v-model="newUC.name"
                         label="Nombre de la UC"
                       ></v-textarea>
+                      <v-text-field
+                        label="Cualificaciones asociadas a esta UC"
+                        v-model="newUC.qualys"
+                      ></v-text-field>
 
                       <v-btn class="me-4" :type="submit" color="primary"
                         >Enviar</v-btn

@@ -44,14 +44,25 @@
                         item-value="id"
                         :items="store.listActiveCandidatesFullNamesIds()"
                       ></v-autocomplete>
-
                       <v-select
                         label="Etapa"
                         :rules="[rules.required]"
                         v-model="newActivity.stage"
                         :items="availableStages"
                       ></v-select>
-
+                      <v-checkbox
+                        label="Con candidato"
+                        v-model="newActivity.withCandidate"
+                      ></v-checkbox>
+                      <v-checkbox
+                        label="Presencial"
+                        v-model="newActivity.inPerson"
+                      ></v-checkbox>
+                      <v-text-field
+                        label="Desplazamiento (km)"
+                        type="number"
+                        v-model="newActivity.km"
+                      ></v-text-field>
                       <v-textarea
                         v-model="newActivity.description"
                         label="Descripción"
@@ -96,6 +107,12 @@
         <template v-slot:item.stage="{ value }">
           {{ store.getActivityStageTitleByValue(value) }}
         </template>
+        <template v-slot:item.withCandidate="{ value }">
+          {{ value ? "Sí" : "No" }}
+        </template>
+        <template v-slot:item.inPerson="{ value }">
+          {{ value ? "Sí" : "No" }}
+        </template>
         <template v-slot:item.actions="{ item }">
           <v-icon size="small" class="me-2" @click="editItem(item)">
             mdi-pencil
@@ -137,6 +154,9 @@ let headers = [
   },
   { key: "stage", title: "Etapa", sortable: false },
   { key: "description", title: "Descripción", sortable: false },
+  { key: "withCandidate", title: "Con candidato", sortable: false },
+  { key: "inPerson", title: "Presencial", sortable: false },
+  { key: "km", title: "Km", sortable: false },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
 

@@ -114,15 +114,67 @@
             mdi-format-list-bulleted
           </v-icon>
         </template>
+        <template v-slot:item.documents="{ item }">
+          <v-chip
+            size="small"
+            class="me-2"
+            @click="store.generarCertificados('AE4', item)"
+            color="indigo"
+            title="Ficha de asesoramiento/evaluación"
+          >
+            AE4
+          </v-chip>
+          <v-chip
+            v-if="item.stage == 20"
+            size="small"
+            class="me-2"
+            @click="store.generarCertificados('A9', item)"
+            color="teal"
+            title="Informe de asesoramiento"
+          >
+            A9
+          </v-chip>
+          <v-chip
+            v-if="item.stage == 20"
+            size="small"
+            class="me-2"
+            @click="store.generarCertificados('A10', item)"
+            color="teal"
+            title="Comunicación del resultado del asesoramiento"
+          >
+            A10
+          </v-chip>
+          <v-chip
+            v-if="item.stage == 30"
+            size="small"
+            class="me-2"
+            @click="store.generarCertificados('E3', item)"
+            color="pink"
+            title="Informe de evaluación"
+          >
+            E3
+          </v-chip>
+        </template>
         <template v-slot:item.actions="{ item }">
-          <v-icon size="small" class="me-2" @click="editItem(item)">
+          <v-icon
+            title="Editar"
+            size="small"
+            class="me-2"
+            @click="editItem(item)"
+          >
             mdi-pencil
           </v-icon>
-          <v-icon size="small" class="me-2" @click="deleteItem(item)">
+          <v-icon
+            title="Borrar"
+            size="small"
+            class="me-2"
+            @click="deleteItem(item)"
+          >
             mdi-delete
           </v-icon>
           <v-icon
             color="red"
+            title="Mostrar"
             size="small"
             class="me-2"
             v-if="!item.active"
@@ -132,6 +184,7 @@
           >
           <v-icon
             color="green"
+            title="Ocultar"
             size="small"
             class="me-2"
             v-else
@@ -183,6 +236,7 @@ let headers = [
   { key: "phone", title: "Teléfono", sortable: false },
   { key: "email", title: "Email", sortable: false },
   { key: "UCs", title: "UCs", sortable: false },
+  { key: "documents", title: "Documentación", sortable: false },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
 

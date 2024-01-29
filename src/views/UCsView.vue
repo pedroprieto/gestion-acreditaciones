@@ -39,12 +39,28 @@
                   <v-container>
                     <v-form @submit.prevent="createUC()" v-model="valid">
                       <v-autocomplete
+                        v-if="!editedElement"
                         label="UC"
                         v-model="newUCId"
                         item-title="fullName"
                         item-value="id"
                         :items="store.listUCsAsesorablesFullNamesIds()"
                       ></v-autocomplete>
+                      <v-textarea
+                        v-model="newUC.evidence"
+                        label="Evidencias"
+                      ></v-textarea>
+                      <v-autocomplete
+                        label="Resultado"
+                        v-model="newUC.result"
+                        item-title="description"
+                        item-value="id"
+                        :items="store.listResultsByStage(candidateData.stage)"
+                      ></v-autocomplete>
+                      <v-textarea
+                        v-model="newUC.proposal"
+                        label="Observaciones / Propuesta formativa"
+                      ></v-textarea>
 
                       <v-btn class="me-4" :type="submit" color="primary"
                         >Enviar</v-btn
@@ -120,6 +136,9 @@ let headers = [
     title: "Código UC",
   },
   { key: "name", title: "Nombre UC", sortable: false },
+  { key: "proposal", title: "Propuesta", sortable: false },
+  { key: "result", title: "Resultado", sortable: false },
+  { key: "evidence", title: "Evidencias", sortable: false },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
 
@@ -129,12 +148,13 @@ let rules = {
 
 function createUC() {
   if (valid.value) {
-    let UCData = store.getUCAsesorableById(newUCId.value);
-    newUC.value.code = UCData.code;
-    newUC.value.name = UCData.name;
     if (editedElement) {
       Object.assign(editedElement, newUC.value);
     } else {
+      let UCData = store.getUCAsesorableById(newUCId.value);
+      newUC.value.code = UCData.code;
+      newUC.value.name = UCData.name;
+      newUC.value.qualys = UCData.qualys;
       store.createUC(newUC.value, props.candidate);
     }
     close();
@@ -147,6 +167,7 @@ async function close() {
   await nextTick();
   editedElement = null;
   newUC.value = {};
+  newUCId.value = "";
 }
 
 function editItem(item) {
