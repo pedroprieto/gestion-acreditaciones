@@ -40,8 +40,6 @@ jobs:
       - name: Install Node.js dependencies
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
       - name: Build
-        env:
-          VITE_BASE_URL: /gestionacreditaciones
         run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
