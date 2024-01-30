@@ -1,7 +1,14 @@
 <template>
   <v-container>
     <v-row>
-      <v-data-table :search="search" :headers="headers" :items="store.sessions">
+      <v-data-table
+        show-select
+        select-strategy="single"
+        :search="search"
+        :headers="headers"
+        :items="store.sessions"
+        v-model="selectedItem"
+      >
         <template v-slot:top>
           <v-toolbar flat>
             <v-toolbar-title>Sesiones</v-toolbar-title>
@@ -70,11 +77,6 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.activities="{ item }">
-          <v-icon size="large" class="me-2" @click="navToSession(item)">
-            mdi-format-list-bulleted
-          </v-icon>
-        </template>
         <template v-slot:item.actions="{ item }">
           <v-icon size="small" class="me-2" @click="editItem(item)">
             mdi-pencil
@@ -86,11 +88,15 @@
         <template v-slot:no-data> No hay sesiones</template>
       </v-data-table>
     </v-row>
+    <v-row v-if="selectedItem && selectedItem.length">
+      <v-divider thickness="5"></v-divider>
+      <router-view />
+    </v-row>
   </v-container>
 </template>
 
 <script setup>
-import { ref, nextTick, computed } from "vue";
+import { ref, nextTick, computed, watch } from "vue";
 import { useAppStore } from "../store/app";
 import { useRouter } from "vue-router";
 
@@ -105,6 +111,7 @@ let dialogDelete = ref(false);
 let text = ref("");
 let search = ref("");
 let hide = ref(true);
+let selectedItem = ref([]);
 
 let editedElement = null;
 let formTitle;
@@ -114,13 +121,20 @@ let headers = [
     key: "date",
     title: "Fecha",
   },
-  { key: "activities", title: "Actividades", sortable: false, align: "end" },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
 
 let rules = {
   required: (value) => !!value || "Obligatorio.",
 };
+
+watch(selectedItem, async (newValue, oldValue) => {
+  if (newValue.length) {
+    router.push({ name: "session", params: { session: newValue[0] } });
+  } else {
+    router.push({ name: "sessions" });
+  }
+});
 
 function createSession() {
   if (valid.value) {
@@ -166,9 +180,5 @@ function hideItem(item) {
 function deleteItemConfirm() {
   store.deleteSession(editedElement);
   close();
-}
-
-function navToSession(session) {
-  router.push({ name: "session", params: { session: session.id } });
 }
 </script>

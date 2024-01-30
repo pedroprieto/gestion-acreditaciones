@@ -9,7 +9,8 @@
         <template v-slot:top>
           <v-toolbar flat>
             <v-toolbar-title>
-              Sesión del {{ new Date(sessionData.date).toLocaleDateString() }}
+              Actividades del
+              {{ new Date(sessionData.date).toLocaleDateString() }}
             </v-toolbar-title>
             <v-text-field
               v-model="search"

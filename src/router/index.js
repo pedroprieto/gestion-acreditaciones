@@ -49,6 +49,18 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "home" */ "@/views/SessionsView.vue"),
         props: true,
+        children: [
+          {
+            path: "/:session",
+            name: "session",
+            meta: {
+              prompt: "Sesión",
+            },
+            component: () =>
+              import(/* webpackChunkName: "home" */ "@/views/SessionView.vue"),
+            props: true,
+          },
+        ],
       },
       {
         path: "/ucsasesorables",
@@ -61,16 +73,6 @@ const routes = [
           import(
             /* webpackChunkName: "home" */ "@/views/UCsAsesorablesView.vue"
           ),
-        props: true,
-      },
-      {
-        path: "/sessions/:session",
-        name: "session",
-        meta: {
-          prompt: "Sesión",
-        },
-        component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/SessionView.vue"),
         props: true,
       },
       {
