@@ -1,88 +1,28 @@
 <template>
-  <div class="container">
-    <form @submit.prevent="enviar()">
-      <div class="field">
-        <label for="name" class="label">Nombre</label>
-        <div class="control">
-          <input
-            required
-            v-model="store.info.name"
-            id="name"
-            class="input"
-            type="text"
-            placeholder="Nombre"
-          />
-        </div>
-        <label for="surname" class="label">Apellidos</label>
-        <div class="control">
-          <input
-            required
+  <v-card>
+    <v-card-title>
+      <span class="text-h5">Mis Datos</span>
+    </v-card-title>
+    <v-card-text>
+      <v-container>
+        <v-form @submit.prevent="enviar()" v-model="valid">
+          <v-text-field label="Nombre" v-model="store.info.name"></v-text-field>
+          <v-text-field
+            label="Apellidos"
             v-model="store.info.familyName"
-            id="surname"
-            class="input"
-            type="text"
-            placeholder="Apellidos"
-          />
-        </div>
-        <label for="nif" class="label">NIF</label>
-        <div class="control">
-          <input
-            required
-            v-model="store.info.nif"
-            id="nif"
-            class="input"
-            type="text"
-            placeholder="NIF"
-          />
-        </div>
-        <div class="control">
-          <input
-            required
-            v-model="store.info.city"
-            id="city"
-            class="input"
-            type="text"
-            placeholder="Ciudad"
-          />
-        </div>
-        <div class="control">
-          <input
-            required
+          ></v-text-field>
+          <v-text-field label="NIF" v-model="store.info.nif"></v-text-field>
+          <v-text-field label="Ciudad" v-model="store.info.city"></v-text-field>
+          <v-text-field
+            label="FamiliaProfesional"
             v-model="store.info.familiaProfesional"
-            id="familiaProfesional"
-            class="input"
-            type="text"
-            placeholder="Familia profesional"
-          />
-        </div>
-        <div class="control">
-          <input
-            required
-            v-model="store.info.sede"
-            id="sede"
-            class="input"
-            type="text"
-            placeholder="Sede"
-          />
-        </div>
-      </div>
-
-      <div class="field is-grouped">
-        <div class="control">
-          <button type="submit" class="button is-primary">Enviar</button>
-        </div>
-        <!-- <div class="control"> -->
-        <!--   <button -->
-        <!--     type="button" -->
-        <!--     @click="cancelarEdicion()" -->
-        <!--     class="button is-link is-light" -->
-        <!--   > -->
-        <!--     Cancelar -->
-        <!--   </button> -->
-        <!-- </div> -->
-      </div>
-    </form>
-  </div>
+          ></v-text-field>
+          <v-text-field label="Sede" v-model="store.info.sede"></v-text-field>
+          <v-btn class="me-4" :type="submit" color="primary">Volver</v-btn>
+        </v-form>
+      </v-container>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup>
@@ -93,6 +33,6 @@ const store = useAppStore(); //initialize the store
 const router = useRouter();
 
 function enviar() {
-  router.push({ name: "root" });
+  router.push({ name: "Home" });
 }
 </script>
