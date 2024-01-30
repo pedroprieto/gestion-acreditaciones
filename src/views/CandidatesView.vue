@@ -5,6 +5,9 @@
         :search="search"
         :headers="headers"
         :items="filteredCandidates"
+        show-select
+        select-strategy="single"
+        v-model="selectedItem"
       >
         <template v-slot:top>
           <v-toolbar flat>
@@ -281,6 +284,24 @@
         <template v-slot:no-data> No hay candidatos </template>
       </v-data-table>
     </v-row>
+    <v-row v-if="selectedItem && selectedItem.length">
+      <v-divider thickness="5"></v-divider>
+      <v-col>
+        <v-card elevation="10">
+          <v-toolbar density="compact" flat>
+            <v-toolbar-title
+              >Actuaciones con el candidato
+              {{ selectedCandidateFullName }}</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-data-table
+            :headers="headersActivities"
+            :items="selectedCandidateWithActivities"
+          >
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-row>
     <v-snackbar color="error" elevation="24" v-model="snackbar" timeout="2000">
       {{ textSnackbar }}
     </v-snackbar>
@@ -304,6 +325,7 @@ let text = ref("");
 let search = ref("");
 let hide = ref(true);
 let snackbar = ref(false);
+let selectedItem = ref([]);
 
 let editedElement = null;
 let formTitle;
@@ -337,6 +359,15 @@ let headers = [
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
 
+let headersActivities = [
+  { key: "date", title: "Fecha" },
+  { key: "stage", title: "Etapa", sortable: false },
+  { key: "description", title: "Descripción", sortable: false },
+  { key: "withCandidate", title: "Con candidato", sortable: false },
+  { key: "inPerson", title: "Presencial", sortable: false },
+  { key: "km", title: "Km", sortable: false },
+];
+
 let rules = {
   required: (value) => !!value || "Obligatorio.",
   email: (value) => {
@@ -350,6 +381,18 @@ const filteredCandidates = computed(() => {
   if (hide.value) return store.listActiveCandidates();
 
   return store.candidates;
+});
+
+const selectedCandidateFullName = computed(() => {
+  if (selectedItem.value)
+    return store.getCandidateFullNameById(selectedItem.value[0]);
+  return "";
+});
+
+const selectedCandidateWithActivities = computed(() => {
+  if (selectedItem.value)
+    return store.listActivitiesByCandidateId(selectedItem.value[0]);
+  return null;
 });
 
 function createCandidate() {

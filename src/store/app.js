@@ -151,6 +151,19 @@ export const useAppStore = defineStore("app", {
     listUCsByCandidateId(candidateId) {
       return this.UCs.filter((uc) => uc.candidateId == candidateId);
     },
+    listActivitiesByCandidateId(candidateId) {
+      return this.activities
+        .filter((ac) => ac.candidate == candidateId)
+        .map((ac) => ({
+          stage: this.getActivityStageTitleByValue(ac.stage),
+          date: new Date(ac.date).toLocaleDateString(),
+          withCandidate: ac.withCandidate ? "Sí" : "No",
+          inPerson: ac.inPerson ? "Sí" : "No",
+          km: ac.km || "-",
+          description: ac.description,
+        }));
+    },
+
     groupUCsByQualy(UCs) {
       return UCs.reduce((acc, UC) => {
         for (let qualy of UC.qualys) {
@@ -215,17 +228,7 @@ export const useAppStore = defineStore("app", {
           linebreaks: true,
         });
 
-        let activities = this.activities
-          .filter((ac) => ac.candidate == candidate.id)
-          .map((ac) => ({
-            stage: this.getActivityStageTitleByValue(ac.stage),
-            date: new Date(ac.date).toLocaleDateString(),
-            withCandidate: ac.withCandidate ? "Sí" : "No",
-            inPerson: ac.inPerson ? "Sí" : "No",
-            km: ac.km || "-",
-            description: ac.description,
-          }));
-
+        let activities = listActivitiesByCandidateId(candidate.id);
         let candidateUCs = this.listUCsByCandidateId(candidate.id);
         let candidateQualys = this.groupUCsByQualy(candidateUCs);
         let UCsPass = candidateUCs.filter((uc) => uc.result != "D");
