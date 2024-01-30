@@ -23,7 +23,7 @@
             <v-spacer></v-spacer>
             <v-switch
               v-model="hide"
-              label="Ocultar desactivados"
+              label="Ocultar finalizados"
               color="secondary"
               hide-details
             ></v-switch>
@@ -160,51 +160,61 @@
         <template v-slot:item.documents="{ item }">
           <v-chip
             size="small"
+            variant="flat"
             class="me-2"
             @click="store.generarCertificados('AE4', item)"
-            color="indigo"
+            color="primary"
             title="Ficha de asesoramiento/evaluación"
           >
+            <v-icon start icon="mdi-office-building"></v-icon>
             AE4
           </v-chip>
           <v-chip
             v-if="item.stage == 20 && !item.exclusion && !item.changeCommission"
+            variant="flat"
             size="small"
             class="me-2"
             @click="store.generarCertificados('A61', item)"
-            color="teal"
+            color="secondary"
             title="Informe de continuidad"
           >
+            <v-icon start icon="mdi-account"></v-icon>
             A6-1
           </v-chip>
           <v-chip
             v-if="item.stage == 20 && item.changeCommission"
+            variant="flat"
             size="small"
             class="me-2"
             @click="store.generarCertificados('A62', item)"
-            color="teal"
+            color="orange"
             title="Informe de cambio de sede"
           >
+            <v-icon start icon="mdi-account"></v-icon>
             A6-2
           </v-chip>
           <v-chip
             v-if="item.stage == 20 && item.exclusion"
+            variant="flat"
             size="small"
             class="me-2"
             @click="store.generarCertificados('A63', item)"
-            color="teal"
+            color="red"
             title="Informe de exclusión"
           >
+            <v-icon start icon="mdi-account"></v-icon>
             A6-3
           </v-chip>
           <v-chip
             v-if="item.stage == 20 && !item.exclusion && !item.changeCommission"
+            variant="flat"
             size="small"
             class="me-2"
             @click="store.generarCertificados('A9', item)"
             color="teal"
             title="Informe de asesoramiento"
           >
+            <v-icon start icon="mdi-office-building"></v-icon>
             A9
           </v-chip>
           <v-chip
@@ -212,9 +222,10 @@
             size="small"
             class="me-2"
             @click="store.generarCertificados('A10', item)"
-            color="teal"
+            color="primary"
             title="Comunicación del resultado del asesoramiento"
           >
+            <v-icon start icon="mdi-account"></v-icon>
             A10
           </v-chip>
           <v-chip
@@ -222,9 +233,10 @@
             size="small"
             class="me-2"
             @click="store.generarCertificados('E3', item)"
-            color="pink"
+            color="primary"
             title="Informe de evaluación"
           >
+            <v-icon start icon="mdi-account"></v-icon>
             E3
           </v-chip>
         </template>

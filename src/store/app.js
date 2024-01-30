@@ -21,7 +21,7 @@ export const useAppStore = defineStore("app", {
       "No conseguir contactar con el candidato/a",
     ];
     let stages = [
-      { title: "Asesoramiento (+Pre)", value: 20 },
+      { title: "Asesoramiento", value: 20 },
       { title: "Evaluación", value: 30 },
     ];
 
@@ -223,6 +223,7 @@ export const useAppStore = defineStore("app", {
             withCandidate: ac.withCandidate ? "Sí" : "No",
             inPerson: ac.inPerson ? "Sí" : "No",
             km: ac.km || "-",
+            description: ac.description,
           }));
 
         let candidateUCs = this.listUCsByCandidateId(candidate.id);
