@@ -7,7 +7,7 @@
         :items="store.listActivitiesBySession(session)"
       >
         <template v-slot:top>
-          <v-toolbar flat>
+          <v-toolbar density="compact" flat>
             <v-toolbar-title>
               Actividades del
               {{ new Date(sessionData.date).toLocaleDateString() }}

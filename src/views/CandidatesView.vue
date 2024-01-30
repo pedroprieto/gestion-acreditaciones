@@ -285,8 +285,8 @@
       </v-data-table>
     </v-row>
     <v-row v-if="selectedItem && selectedItem.length">
-      <v-divider thickness="5"></v-divider>
       <v-col>
+        <v-divider thickness="5" color="primary" class="mt-5 mb-5"></v-divider>
         <v-card elevation="10">
           <v-toolbar density="compact" flat>
             <v-toolbar-title
