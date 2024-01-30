@@ -72,12 +72,39 @@
                         :rules="[rules.required, rules.email]"
                         v-model="newUser.email"
                       ></v-text-field>
-                      <v-combobox
-                        clearable
+                      <v-checkbox
                         label="Exclusión"
+                        v-model="newUser.exclusion"
+                      ></v-checkbox>
+                      <v-combobox
+                        v-if="newUser.exclusion"
+                        clearable
+                        label="Motivo exclusión"
                         v-model="newUser.exclusionCause"
                         :items="store.exclusionCauses"
                       ></v-combobox>
+                      <v-checkbox
+                        label="Cambio sede"
+                        v-model="newUser.changeCommission"
+                      ></v-checkbox>
+                      <template v-if="newUser.changeCommission">
+                        <v-text-field
+                          label="Familia Profesional"
+                          v-model="newUser.changeCommissionFamiliaProfesional"
+                        ></v-text-field>
+                        <v-text-field
+                          label="Centro"
+                          v-model="newUser.changeCommissionIES"
+                        ></v-text-field>
+                        <v-text-field
+                          label="Ciudad"
+                          v-model="newUser.changeCommissionCity"
+                        ></v-text-field>
+                        <v-text-field
+                          label="Provincia"
+                          v-model="newUser.changeCommissionProvince"
+                        ></v-text-field>
+                      </template>
                       <v-btn class="me-4" :type="submit" color="primary"
                         >Enviar</v-btn
                       >
@@ -114,7 +141,12 @@
         <template v-slot:item.stage="{ value }">
           {{ store.getStageTitleByValue(value) }}
         </template>
-        <template v-slot:item.exclusionCause="{ value }">
+        <template v-slot:item.exclusion="{ value }">
+          <v-icon :title="value" v-if="value" size="large" class="me-2">
+            mdi-check
+          </v-icon>
+        </template>
+        <template v-slot:item.changeCommission="{ value }">
           <v-icon :title="value" v-if="value" size="large" class="me-2">
             mdi-check
           </v-icon>
@@ -136,7 +168,27 @@
             AE4
           </v-chip>
           <v-chip
-            v-if="item.stage == 20"
+            v-if="item.stage == 20 && !item.exclusion && !item.changeCommission"
+            size="small"
+            class="me-2"
+            @click="store.generarCertificados('A61', item)"
+            color="teal"
+            title="Informe de continuidad"
+          >
+            A6-1
+          </v-chip>
+          <v-chip
+            v-if="item.stage == 20 && item.changeCommission"
+            size="small"
+            class="me-2"
+            @click="store.generarCertificados('A62', item)"
+            color="teal"
+            title="Informe de cambio de sede"
+          >
+            A6-2
+          </v-chip>
+          <v-chip
+            v-if="item.stage == 20 && item.exclusion"
             size="small"
             class="me-2"
             @click="store.generarCertificados('A63', item)"
@@ -146,7 +198,7 @@
             A6-3
           </v-chip>
           <v-chip
-            v-if="item.stage == 20"
+            v-if="item.stage == 20 && !item.exclusion && !item.changeCommission"
             size="small"
             class="me-2"
             @click="store.generarCertificados('A9', item)"
@@ -156,7 +208,7 @@
             A9
           </v-chip>
           <v-chip
-            v-if="item.stage == 20"
+            v-if="item.stage == 20 && !item.exclusion && !item.changeCommission"
             size="small"
             class="me-2"
             @click="store.generarCertificados('A10', item)"
@@ -257,8 +309,14 @@ let headers = [
   { key: "phone", title: "Teléfono", sortable: false },
   { key: "email", title: "Email", sortable: false },
   {
-    key: "exclusionCause",
+    key: "exclusion",
     title: "Exclusión",
+    sortable: false,
+    align: "center",
+  },
+  {
+    key: "changeCommission",
+    title: "Cambio de sede",
     sortable: false,
     align: "center",
   },
@@ -325,7 +383,6 @@ function deleteItem(item) {
 }
 
 function hideItem(item) {
-  console.log(item.active);
   item.active = !item.active;
 }
 

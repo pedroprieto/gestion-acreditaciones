@@ -246,6 +246,11 @@ export const useAppStore = defineStore("app", {
           hasUCsPass: UCsPass.length > 0,
           hasUCsFail: UCsFail.length > 0,
           exclusionCause: candidate.exclusionCause,
+          changeCommissionFamiliaProfesional:
+            candidate.changeCommissionFamiliaProfesional,
+          changeCommissionIES: candidate.changeCommissionIES,
+          changeCommissionCity: candidate.changeCommissionCity,
+          changeCommissionProvince: candidate.changeCommissionProvince,
         });
         doc.render();
         const out = doc.getZip().generate({
