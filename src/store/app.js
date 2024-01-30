@@ -9,6 +9,17 @@ import { saveAs } from "file-saver";
 
 export const useAppStore = defineStore("app", {
   state: () => {
+    let exclusionCauses = [
+      "No acreditar la residencia en la Comunitat Valenciana",
+      "No poseer la nacionalidad española, haber obtenido el certificado de registro de ciudadanía comunitaria o la tarjeta de familiar de ciudadano o ciudadana de la Unión, o ser titular de una autorización de residencia o, de residencia y trabajo en España en vigor, en los términos establecidos en la normativa española de extranjería e inmigración.",
+      "No tener 18 años cumplidos en el momento de realizar la inscripción, cuando se trate de unidades de competencia correspondientes a cualificaciones de nivel I y 20 años para los niveles II y III.",
+      "No tener la experiencia laboral y/o formación no formal mínima requerida, relacionada con el sector profesional en el que quiere se le reconozca la competencia profesional.",
+      "No tener la experiencia laboral mínima requerida, relacionada con el sector profesional en el que quiere se le reconozca la competencia profesional.\n • Unidades de competencia nivel II y III, más de 3 años con un mínimo de 2.000 horas trabajadas en los últimos 15 años.\n • Unidades de competencia de nivel I, más de 2 años y un mínimo de 1200 horas.",
+      "No tener la formación no formal mínima requerida, relacionada con el sector profesional en el que quiere se le reconozca la competencia profesional. • Unidades de competencia nivel II y III, más de 300 horas cursadas en los últimos 10 años. • Unidades de competencia nivel I, más de 200 horas cursadas en los últimos 10 años.",
+      "No presentarse a la cita sin justificar ausencia",
+      "No acreditar el pago o la exención de tasas",
+      "No conseguir contactar con el candidato/a",
+    ];
     let stages = [
       { title: "Asesoramiento (+Pre)", value: 20 },
       { title: "Evaluación", value: 30 },
@@ -54,6 +65,7 @@ export const useAppStore = defineStore("app", {
     estado.stages = stages;
     estado.activityStages = activityStages;
     estado.results = results;
+    estado.exclusionCauses = exclusionCauses;
     return estado;
   },
   actions: {
@@ -233,6 +245,7 @@ export const useAppStore = defineStore("app", {
           UCsFail,
           hasUCsPass: UCsPass.length > 0,
           hasUCsFail: UCsFail.length > 0,
+          exclusionCause: candidate.exclusionCause,
         });
         doc.render();
         const out = doc.getZip().generate({

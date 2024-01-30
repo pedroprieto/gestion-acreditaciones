@@ -72,6 +72,12 @@
                         :rules="[rules.required, rules.email]"
                         v-model="newUser.email"
                       ></v-text-field>
+                      <v-combobox
+                        clearable
+                        label="Exclusión"
+                        v-model="newUser.exclusionCause"
+                        :items="store.exclusionCauses"
+                      ></v-combobox>
                       <v-btn class="me-4" :type="submit" color="primary"
                         >Enviar</v-btn
                       >
@@ -108,6 +114,11 @@
         <template v-slot:item.stage="{ value }">
           {{ store.getStageTitleByValue(value) }}
         </template>
+        <template v-slot:item.exclusionCause="{ value }">
+          <v-icon :title="value" v-if="value" size="large" class="me-2">
+            mdi-check
+          </v-icon>
+        </template>
 
         <template v-slot:item.UCs="{ item }">
           <v-icon size="large" class="me-2" @click="navToUCs(item)">
@@ -123,6 +134,16 @@
             title="Ficha de asesoramiento/evaluación"
           >
             AE4
+          </v-chip>
+          <v-chip
+            v-if="item.stage == 20"
+            size="small"
+            class="me-2"
+            @click="store.generarCertificados('A63', item)"
+            color="teal"
+            title="Informe de exclusión"
+          >
+            A6-3
           </v-chip>
           <v-chip
             v-if="item.stage == 20"
@@ -235,6 +256,12 @@ let headers = [
   { key: "familyName", title: "Apellidos" },
   { key: "phone", title: "Teléfono", sortable: false },
   { key: "email", title: "Email", sortable: false },
+  {
+    key: "exclusionCause",
+    title: "Exclusión",
+    sortable: false,
+    align: "center",
+  },
   { key: "UCs", title: "UCs", sortable: false },
   { key: "documents", title: "Documentación", sortable: false },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
