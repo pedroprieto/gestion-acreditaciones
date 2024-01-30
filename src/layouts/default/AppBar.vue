@@ -8,7 +8,7 @@ const mainRoutes = router
   .getRoutes()
   .filter((route) => route.meta && route.meta.mainMenu);
 
-const drawer = ref(false);
+// const drawer = ref(false);
 </script>
 
 <template>
@@ -39,11 +39,8 @@ const drawer = ref(false);
   </v-toolbar>
 
   <v-tabs color="deep-purple-accent-4" align-tabs="center">
-    <v-tab
-      v-for="route of mainRoutes"
-      :to="route.path"
-      :value="route.meta.prompt"
-      >{{ route.meta.prompt }}</v-tab
-    >
+    <v-tab v-for="route of mainRoutes" :to="route.path">{{
+      route.meta.prompt
+    }}</v-tab>
   </v-tabs>
 </template>

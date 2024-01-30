@@ -10,8 +10,8 @@ const routes = [
         path: "",
         name: "Home",
         meta: {
+          prompt: "Inicio",
           mainMenu: true,
-          prompt: "Raíz",
         },
         component: () =>
           import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
