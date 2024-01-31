@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useAppStore } from "../store/app";
 const store = useAppStore(); //initialize the store
 

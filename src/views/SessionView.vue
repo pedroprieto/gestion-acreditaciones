@@ -188,10 +188,6 @@ function deleteItem(item) {
   editedElement = item;
 }
 
-function hideItem(item) {
-  item.active = !item.active;
-}
-
 function deleteItemConfirm() {
   store.deleteActivity(editedElement);
   close();

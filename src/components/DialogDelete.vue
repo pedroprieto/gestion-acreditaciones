@@ -17,4 +17,5 @@
 </template>
 <script setup>
 const dialogDelete = defineModel();
+defineEmits(["close", "accept"]);
 </script>
