@@ -31,6 +31,13 @@ export const useAppStore = defineStore("app", {
       { title: "Evaluación", value: 30 },
     ];
 
+    let periods = [1, 2];
+    let years = [];
+    let currentYear = new Date().getFullYear();
+    for (let y = 2015; y <= currentYear; y++) {
+      years.push(y);
+    }
+
     let results = [
       {
         id: "FED",
@@ -66,9 +73,89 @@ export const useAppStore = defineStore("app", {
     estado.activityStages = activityStages;
     estado.results = results;
     estado.exclusionCauses = exclusionCauses;
+    estado.periods = periods;
+    estado.years = years;
+    estado.year = currentYear;
+    estado.period = 1;
     return estado;
   },
   actions: {
+    updateSelectedPeriodYear(period, year) {
+      if (this.years.includes(year)) {
+        this.year = year;
+      } else {
+        this.year = this.getCurrentYear();
+      }
+      if (this.periods.includes(period)) {
+        this.period = period;
+      } else {
+        this.period = this.getCurrentPeriod();
+      }
+    },
+    getNCByStageYearPeriod(year, period, stage) {
+      function onlyUnique(value, index, array) {
+        return array.indexOf(value) === index;
+      }
+      return this.activities
+        .filter((a) => {
+          let d = new Date(a.date);
+          return (
+            d >= this.getBeginDate(year, period) &&
+            d <= this.getEndDate(year, period) &&
+            a.stage == stage
+          );
+        })
+        .map((el) => el.candidate)
+        .filter(onlyUnique);
+    },
+    getUCsForCandidateIdList(candidateIdsArray) {
+      let numUCs = 0;
+      for (let c of candidateIdsArray) {
+        numUCs += this.listUCsByCandidateId(c).length;
+      }
+      return numUCs;
+    },
+    getSessionsByYearPeriod(year, period) {
+      return this.sessions.filter((a) => {
+        let d = new Date(a.date);
+        return (
+          d >= this.getBeginDate(year, period) &&
+          d <= this.getEndDate(year, period)
+        );
+      });
+    },
+
+    getCurrentYear() {
+      let today = new Date();
+      return today.getFullYear();
+    },
+    getCurrentPeriod() {
+      let today = new Date();
+      let curMonth = today.getMonth();
+      let curDay = today.getDate();
+      // > 15/06
+      if (curMonth > 5 || (curMonth == 5 && curDay > 15)) return 2;
+      return 1;
+    },
+    getBeginDate(year, period) {
+      let beginDate;
+      if (period == 1) {
+        beginDate = new Date(`${year}-01-01`);
+      } else {
+        beginDate = new Date(`${year}-06-16`);
+      }
+      return beginDate;
+    },
+    getEndDate(year, period) {
+      let endDate;
+      if (period == 1) {
+        endDate = new Date(`${year}-06-15`);
+      } else {
+        endDate = new Date(`${year}-12-31`);
+      }
+      return endDate;
+    },
+
     listResultsByStage(stageId) {
       return this.results.filter((r) => r.stage == stageId);
     },
@@ -108,6 +195,11 @@ export const useAppStore = defineStore("app", {
     },
     createSession(sessionData) {
       let c = Object.assign({ id: uuidv4(), active: true }, sessionData);
+      c.activities = [
+        { stage: 10, numSessions: 0 },
+        { stage: 20, numSessions: 0 },
+        { stage: 30, numSessions: 0 },
+      ];
       this.sessions.push(c);
     },
     getSessionById(sessionId) {
@@ -127,6 +219,13 @@ export const useAppStore = defineStore("app", {
     createActivity(activityData, sessionId) {
       let c = Object.assign({ id: uuidv4(), sessionId }, activityData);
       let session = this.getSessionById(sessionId);
+      let stage = session.activities.find(
+        (el) => el.stage == activityData.stage,
+      );
+      stage.numSessions += 1;
+      session.activities.sort((a, b) => {
+        return b.numSessions - a.numSessions;
+      });
       c.date = session.date;
       this.activities.push(c);
     },
@@ -134,6 +233,13 @@ export const useAppStore = defineStore("app", {
       return this.activities.filter((a) => a.sessionId == sessionId);
     },
     deleteActivity(activity) {
+      let session = this.getSessionById(activity.sessionId);
+      let stage = session.activities.find((el) => el.stage == activity.stage);
+      stage.numSessions -= 1;
+      session.activities.sort((a, b) => {
+        return b.numSessions - a.numSessions;
+      });
+
       this.activities.splice(this.activities.indexOf(activity), 1);
     },
     createUC(UCData, candidateId) {
@@ -228,7 +334,7 @@ export const useAppStore = defineStore("app", {
           linebreaks: true,
         });
 
-        let activities = listActivitiesByCandidateId(candidate.id);
+        let activities = this.listActivitiesByCandidateId(candidate.id);
         let candidateUCs = this.listUCsByCandidateId(candidate.id);
         let candidateQualys = this.groupUCsByQualy(candidateUCs);
         let UCsPass = candidateUCs.filter((uc) => uc.result != "D");
@@ -265,6 +371,76 @@ export const useAppStore = defineStore("app", {
         // Output the document using Data-URI
         saveAs(out, `${tipo}-${candidate.familyName}_${candidate.name}.docx`);
       });
+    },
+  },
+  getters: {
+    calculatedSessions: (state) => {
+      let NCPA, NCA, NCE;
+      let NUCA, NUCE;
+      let SMA, SME;
+      let SPA, SA, SE;
+
+      let PAcandidateList = state.getNCByStageYearPeriod(
+        state.year,
+        state.period,
+        10,
+      );
+      let AcandidateList = state.getNCByStageYearPeriod(
+        state.year,
+        state.period,
+        20,
+      );
+      let EcandidateList = state.getNCByStageYearPeriod(
+        state.year,
+        state.period,
+        30,
+      );
+
+      NCPA = PAcandidateList.length;
+      NCA = AcandidateList.length;
+      NCE = EcandidateList.length;
+
+      NUCA = state.getUCsForCandidateIdList(AcandidateList);
+      NUCE = state.getUCsForCandidateIdList(EcandidateList);
+
+      SMA = NUCA / 2;
+      SME = NUCE / 2;
+
+      let sessions = state.getSessionsByYearPeriod(state.year, state.period);
+      let sessionRest = { 10: NCPA, 20: SMA, 30: SME };
+      let sessionCur = { 10: 0, 20: 0, 30: 0 };
+
+      for (let session of sessions) {
+        let end = false;
+        for (let ac of session.activities) {
+          if (sessionRest[ac.stage] > 0) {
+            sessionCur[ac.stage] += 1;
+            sessionRest[ac.stage] -= 1;
+            end = true;
+            break;
+          }
+        }
+        if (!end) {
+          sessionCur[session.activities[0].stage] += 1;
+          sessionRest[session.activities[0].stage] -= 1;
+        }
+      }
+      SPA = sessionCur[10];
+      SA = sessionCur[20];
+      SE = sessionCur[30];
+
+      return {
+        NCPA,
+        NCA,
+        NCE,
+        NUCA,
+        NUCE,
+        SMA,
+        SME,
+        SPA,
+        SA,
+        SE,
+      };
     },
   },
 });

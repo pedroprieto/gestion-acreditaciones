@@ -1,5 +1,92 @@
 <template>
   <v-container>
+    <v-row justify="end">
+      <v-col cols="2">
+        <v-select
+          @update:modelValue="navigate()"
+          v-model="store.year"
+          :items="store.years"
+          density="compact"
+          label="Año"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          @update:modelValue="navigate()"
+          v-model="store.period"
+          :items="store.periods"
+          density="compact"
+          label="Período"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row class="text-center">
+      <v-col>
+        <v-card>
+          <v-card-item>
+            <v-row>
+              <v-col>
+                <v-card-title>Preasesoramiento</v-card-title>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>NCPA</v-col>
+              <v-col>SPA</v-col>
+            </v-row>
+            <v-row class="text-h2">
+              <v-col>{{ store.calculatedSessions.NCPA }} </v-col>
+              <v-col>{{ store.calculatedSessions.SPA }}</v-col>
+            </v-row>
+          </v-card-item>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card>
+          <v-card-item>
+            <v-row>
+              <v-col>
+                <v-card-title>Asesoramiento</v-card-title>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>NCA</v-col>
+              <v-col>NUCA</v-col>
+              <v-col>SA</v-col>
+              <v-col>SMA</v-col>
+            </v-row>
+            <v-row class="text-h2">
+              <v-col>{{ store.calculatedSessions.NCA }}</v-col>
+              <v-col>{{ store.calculatedSessions.NUCA }}</v-col>
+              <v-col>{{ store.calculatedSessions.SA }}</v-col>
+              <v-col>{{ store.calculatedSessions.SMA }}</v-col>
+            </v-row>
+          </v-card-item>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card>
+          <v-card-item>
+            <v-row>
+              <v-col>
+                <v-card-title>Evaluación</v-card-title>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>NCE</v-col>
+              <v-col>NUCE</v-col>
+              <v-col>SE</v-col>
+              <v-col>SME</v-col>
+            </v-row>
+            <v-row class="text-h2">
+              <v-col>{{ store.calculatedSessions.NCE }}</v-col>
+              <v-col>{{ store.calculatedSessions.NUCE }}</v-col>
+              <v-col>{{ store.calculatedSessions.SE }}</v-col>
+              <v-col>{{ store.calculatedSessions.SME }}</v-col>
+            </v-row>
+          </v-card-item>
+        </v-card>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col>
         <v-data-table
@@ -78,6 +165,17 @@
               </v-dialog>
             </v-toolbar>
           </template>
+          <template v-slot:item.activities="{ item }">
+            <v-chip size="small" class="me-2" color="red" variant="outlined">
+              PA: {{ getNumActivitiesByStage(item.activities, 10) }}</v-chip
+            >
+            <v-chip size="small" class="me-2" color="green" variant="outlined">
+              A: {{ getNumActivitiesByStage(item.activities, 20) }}</v-chip
+            >
+            <v-chip size="small" class="me-2" variant="outlined">
+              E: {{ getNumActivitiesByStage(item.activities, 30) }}</v-chip
+            >
+          </template>
           <template v-slot:item.actions="{ item }">
             <v-icon size="small" class="me-2" @click="editItem(item)">
               mdi-pencil
@@ -104,9 +202,10 @@
 <script setup>
 import { ref, nextTick, computed, watch } from "vue";
 import { useAppStore } from "../store/app";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 
 const store = useAppStore();
 
@@ -119,6 +218,11 @@ let search = ref("");
 let hide = ref(true);
 let selectedItem = ref([]);
 
+store.updateSelectedPeriodYear(
+  parseInt(route.query.period),
+  parseInt(route.query.year),
+);
+
 let editedElement = null;
 let formTitle;
 let headers = [
@@ -126,6 +230,12 @@ let headers = [
     align: "start",
     key: "date",
     title: "Fecha",
+  },
+  {
+    key: "activities",
+    title: "Nº Actividades",
+    sortable: false,
+    align: "end",
   },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
@@ -142,6 +252,14 @@ watch(selectedItem, async (newValue, oldValue) => {
   }
 });
 
+async function navigate() {
+  await nextTick();
+  router.push({
+    name: route.name,
+    query: { period: store.period, year: store.year },
+  });
+}
+
 function createSession() {
   if (valid.value) {
     if (editedElement) {
@@ -151,6 +269,10 @@ function createSession() {
     }
     close();
   }
+}
+
+function getNumActivitiesByStage(activities, stage) {
+  return activities.find((ac) => ac.stage == stage).numSessions;
 }
 
 async function close() {
