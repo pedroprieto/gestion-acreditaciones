@@ -8,7 +8,7 @@
           </v-toolbar>
           <v-card-text>
             <v-container>
-              <v-form @submit.prevent="enviar()" v-model="valid">
+              <v-form @submit.prevent="enviar()">
                 <v-text-field
                   label="Nombre"
                   v-model="store.info.name"
@@ -33,9 +33,7 @@
                   label="Sede"
                   v-model="store.info.sede"
                 ></v-text-field>
-                <v-btn class="me-4" :type="submit" color="primary"
-                  >Volver</v-btn
-                >
+                <v-btn class="me-4" type="submit" color="primary">Volver</v-btn>
               </v-form>
             </v-container>
           </v-card-text>
