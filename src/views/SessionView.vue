@@ -26,63 +26,6 @@
           <v-icon size="large" class="me-2"> mdi-plus </v-icon>
           Añadir
         </v-btn>
-        <v-dialog v-model="dialog" max-width="800px">
-          <template> </template>
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-form @submit.prevent="createActivity()" v-model="valid">
-                  <v-autocomplete
-                    label="Candidato"
-                    v-model="newActivity.candidate"
-                    item-title="fullName"
-                    item-value="id"
-                    :items="store.listActiveCandidatesFullNamesIds()"
-                  ></v-autocomplete>
-                  <v-select
-                    label="Etapa"
-                    :rules="[rules.required]"
-                    v-model="newActivity.stage"
-                    :items="availableStages"
-                  ></v-select>
-                  <v-checkbox
-                    label="Con candidato"
-                    v-model="newActivity.withCandidate"
-                  ></v-checkbox>
-                  <v-checkbox
-                    label="Presencial"
-                    v-model="newActivity.inPerson"
-                  ></v-checkbox>
-                  <v-text-field
-                    label="Desplazamiento (km)"
-                    type="number"
-                    v-model="newActivity.km"
-                  ></v-text-field>
-                  <v-textarea
-                    v-model="newActivity.description"
-                    label="Descripción"
-                  ></v-textarea>
-
-                  <v-btn class="me-4" type="submit" color="primary"
-                    >Enviar</v-btn
-                  >
-                  <v-btn class="me-4" type="button" @click="close"
-                    >Cancelar</v-btn
-                  >
-                </v-form>
-              </v-container>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-        <DialogDelete
-          @close="close"
-          @accept="deleteItemConfirm"
-          v-model="dialogDelete"
-        ></DialogDelete>
       </v-toolbar>
     </template>
     <template v-slot:item.candidate="{ value }">
@@ -107,6 +50,59 @@
     </template>
     <template v-slot:no-data> No hay actividades</template>
   </v-data-table>
+  <v-dialog v-model="dialog" max-width="800px">
+    <template> </template>
+    <v-card>
+      <v-card-title>
+        <span class="text-h5">{{ formTitle }}</span>
+      </v-card-title>
+
+      <v-card-text>
+        <v-container>
+          <v-form @submit.prevent="createActivity()" v-model="valid">
+            <v-autocomplete
+              label="Candidato"
+              v-model="newActivity.candidate"
+              item-title="fullName"
+              item-value="id"
+              :items="store.listActiveCandidatesFullNamesIds()"
+            ></v-autocomplete>
+            <v-select
+              label="Etapa"
+              :rules="[rules.required]"
+              v-model="newActivity.stage"
+              :items="availableStages"
+            ></v-select>
+            <v-checkbox
+              label="Con candidato"
+              v-model="newActivity.withCandidate"
+            ></v-checkbox>
+            <v-checkbox
+              label="Presencial"
+              v-model="newActivity.inPerson"
+            ></v-checkbox>
+            <v-text-field
+              label="Desplazamiento (km)"
+              type="number"
+              v-model="newActivity.km"
+            ></v-text-field>
+            <v-textarea
+              v-model="newActivity.description"
+              label="Descripción"
+            ></v-textarea>
+
+            <v-btn class="me-4" type="submit" color="primary">Enviar</v-btn>
+            <v-btn class="me-4" type="button" @click="close">Cancelar</v-btn>
+          </v-form>
+        </v-container>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <DialogDelete
+    @close="close"
+    @accept="deleteItemConfirm"
+    v-model="dialogDelete"
+  ></DialogDelete>
 </template>
 
 <script setup>

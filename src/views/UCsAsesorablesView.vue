@@ -26,45 +26,6 @@
                 <v-icon size="large" class="me-2"> mdi-plus </v-icon>
                 Añadir
               </v-btn>
-              <v-dialog v-model="dialog" max-width="800px">
-                <template> </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-form @submit.prevent="createUC()" v-model="valid">
-                        <v-text-field
-                          label="Código UC"
-                          v-model="newUC.code"
-                        ></v-text-field>
-                        <v-textarea
-                          v-model="newUC.name"
-                          label="Nombre de la UC"
-                        ></v-textarea>
-                        <v-text-field
-                          label="Cualificaciones asociadas a esta UC"
-                          v-model="newUC.qualys"
-                        ></v-text-field>
-
-                        <v-btn class="me-4" type="submit" color="primary"
-                          >Enviar</v-btn
-                        >
-                        <v-btn class="me-4" type="button" @click="close"
-                          >Cancelar</v-btn
-                        >
-                      </v-form>
-                    </v-container>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
-              <DialogDelete
-                @close="close"
-                @accept="deleteItemConfirm"
-                v-model="dialogDelete"
-              ></DialogDelete>
             </v-toolbar>
           </template>
           <template v-slot:item.actions="{ item }">
@@ -79,6 +40,41 @@
         </v-data-table>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" max-width="800px">
+      <template> </template>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">{{ formTitle }}</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-form @submit.prevent="createUC()" v-model="valid">
+              <v-text-field
+                label="Código UC"
+                v-model="newUC.code"
+              ></v-text-field>
+              <v-textarea
+                v-model="newUC.name"
+                label="Nombre de la UC"
+              ></v-textarea>
+              <v-text-field
+                label="Cualificaciones asociadas a esta UC"
+                v-model="newUC.qualys"
+              ></v-text-field>
+
+              <v-btn class="me-4" type="submit" color="primary">Enviar</v-btn>
+              <v-btn class="me-4" type="button" @click="close">Cancelar</v-btn>
+            </v-form>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <DialogDelete
+      @close="close"
+      @accept="deleteItemConfirm"
+      v-model="dialogDelete"
+    ></DialogDelete>
   </v-container>
 </template>
 

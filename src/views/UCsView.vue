@@ -26,56 +26,6 @@
           <v-icon size="large" class="me-2"> mdi-plus </v-icon>
           Añadir
         </v-btn>
-        <v-dialog v-model="dialog" max-width="800px">
-          <template> </template>
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-form @submit.prevent="createUC()" v-model="valid">
-                  <v-autocomplete
-                    v-if="!editedElement"
-                    label="UC"
-                    v-model="newUCId"
-                    item-title="fullName"
-                    item-value="id"
-                    :items="store.listUCsAsesorablesFullNamesIds()"
-                  ></v-autocomplete>
-                  <v-textarea
-                    v-model="newUC.evidence"
-                    label="Evidencias"
-                  ></v-textarea>
-                  <v-autocomplete
-                    label="Resultado"
-                    v-model="newUC.result"
-                    item-title="description"
-                    item-value="id"
-                    :items="store.listResultsByStage(candidateData.stage)"
-                  ></v-autocomplete>
-                  <v-textarea
-                    v-model="newUC.proposal"
-                    label="Observaciones / Propuesta formativa"
-                  ></v-textarea>
-
-                  <v-btn class="me-4" type="submit" color="primary"
-                    >Enviar</v-btn
-                  >
-                  <v-btn class="me-4" type="button" @click="close"
-                    >Cancelar</v-btn
-                  >
-                </v-form>
-              </v-container>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-        <DialogDelete
-          @close="close"
-          @accept="deleteItemConfirm"
-          v-model="dialogDelete"
-        ></DialogDelete>
       </v-toolbar>
     </template>
     <template v-slot:item.actions="{ item }">
@@ -88,6 +38,49 @@
     </template>
     <template v-slot:no-data> No hay UCs</template>
   </v-data-table>
+  <v-dialog v-model="dialog" max-width="800px">
+    <v-card>
+      <v-card-title>
+        <span class="text-h5">{{ formTitle }}</span>
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-form @submit.prevent="createUC()" v-model="valid">
+            <v-autocomplete
+              v-if="!editedElement"
+              label="UC"
+              v-model="newUCId"
+              item-title="fullName"
+              item-value="id"
+              :items="store.listUCsAsesorablesFullNamesIds()"
+            ></v-autocomplete>
+            <v-textarea
+              v-model="newUC.evidence"
+              label="Evidencias"
+            ></v-textarea>
+            <v-autocomplete
+              label="Resultado"
+              v-model="newUC.result"
+              item-title="description"
+              item-value="id"
+              :items="store.listResultsByStage(candidateData.stage)"
+            ></v-autocomplete>
+            <v-textarea
+              v-model="newUC.proposal"
+              label="Observaciones / Propuesta formativa"
+            ></v-textarea>
+            <v-btn class="me-4" type="submit" color="primary">Enviar</v-btn>
+            <v-btn class="me-4" type="button" @click="close">Cancelar</v-btn>
+          </v-form>
+        </v-container>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <DialogDelete
+    @close="close"
+    @accept="deleteItemConfirm"
+    v-model="dialogDelete"
+  ></DialogDelete>
 </template>
 
 <script setup>

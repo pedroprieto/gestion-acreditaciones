@@ -35,99 +35,6 @@
                 <v-icon size="large" class="me-2"> mdi-plus </v-icon>
                 Añadir
               </v-btn>
-              <v-dialog v-model="dialog" max-width="800px">
-                <template> </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-form
-                        @submit.prevent="createCandidate()"
-                        v-model="valid"
-                      >
-                        <v-text-field
-                          label="NIF"
-                          v-model="newUser.nif"
-                        ></v-text-field>
-                        <v-select
-                          label="Etapa"
-                          :rules="[rules.required]"
-                          :items="store.stages"
-                          v-model="newUser.stage"
-                        ></v-select>
-                        <v-text-field
-                          :rules="[rules.required]"
-                          label="Nombre"
-                          v-model="newUser.name"
-                        ></v-text-field>
-                        <v-text-field
-                          label="Apellidos"
-                          :rules="[rules.required]"
-                          v-model="newUser.familyName"
-                        ></v-text-field>
-                        <v-text-field
-                          label="Teléfono"
-                          :rules="[rules.required]"
-                          v-model="newUser.phone"
-                        ></v-text-field>
-                        <v-text-field
-                          label="Email"
-                          type="email"
-                          :rules="[rules.required, rules.email]"
-                          v-model="newUser.email"
-                        ></v-text-field>
-                        <v-checkbox
-                          label="Exclusión"
-                          v-model="newUser.exclusion"
-                        ></v-checkbox>
-                        <v-combobox
-                          v-if="newUser.exclusion"
-                          clearable
-                          label="Motivo exclusión"
-                          v-model="newUser.exclusionCause"
-                          :items="store.exclusionCauses"
-                        ></v-combobox>
-                        <v-checkbox
-                          label="Cambio sede"
-                          v-model="newUser.changeCommission"
-                        ></v-checkbox>
-                        <template v-if="newUser.changeCommission">
-                          <v-text-field
-                            label="Familia Profesional"
-                            v-model="newUser.changeCommissionFamiliaProfesional"
-                          ></v-text-field>
-                          <v-text-field
-                            label="Centro"
-                            v-model="newUser.changeCommissionIES"
-                          ></v-text-field>
-                          <v-text-field
-                            label="Ciudad"
-                            v-model="newUser.changeCommissionCity"
-                          ></v-text-field>
-                          <v-text-field
-                            label="Provincia"
-                            v-model="newUser.changeCommissionProvince"
-                          ></v-text-field>
-                        </template>
-                        <v-btn class="me-4" type="submit" color="primary"
-                          >Enviar</v-btn
-                        >
-                        <v-btn class="me-4" type="button" @click="close"
-                          >Cancelar</v-btn
-                        >
-                      </v-form>
-                    </v-container>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
-              <DialogDelete
-                @close="close"
-                @accept="deleteItemConfirm"
-                v-model="dialogDelete"
-              ></DialogDelete>
             </v-toolbar>
           </template>
           <template v-slot:item.stage="{ value }">
@@ -292,6 +199,89 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" max-width="800px">
+      <template> </template>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">{{ formTitle }}</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-form @submit.prevent="createCandidate()" v-model="valid">
+              <v-text-field label="NIF" v-model="newUser.nif"></v-text-field>
+              <v-select
+                label="Etapa"
+                :rules="[rules.required]"
+                :items="store.stages"
+                v-model="newUser.stage"
+              ></v-select>
+              <v-text-field
+                :rules="[rules.required]"
+                label="Nombre"
+                v-model="newUser.name"
+              ></v-text-field>
+              <v-text-field
+                label="Apellidos"
+                :rules="[rules.required]"
+                v-model="newUser.familyName"
+              ></v-text-field>
+              <v-text-field
+                label="Teléfono"
+                :rules="[rules.required]"
+                v-model="newUser.phone"
+              ></v-text-field>
+              <v-text-field
+                label="Email"
+                type="email"
+                :rules="[rules.required, rules.email]"
+                v-model="newUser.email"
+              ></v-text-field>
+              <v-checkbox
+                label="Exclusión"
+                v-model="newUser.exclusion"
+              ></v-checkbox>
+              <v-combobox
+                v-if="newUser.exclusion"
+                clearable
+                label="Motivo exclusión"
+                v-model="newUser.exclusionCause"
+                :items="store.exclusionCauses"
+              ></v-combobox>
+              <v-checkbox
+                label="Cambio sede"
+                v-model="newUser.changeCommission"
+              ></v-checkbox>
+              <template v-if="newUser.changeCommission">
+                <v-text-field
+                  label="Familia Profesional"
+                  v-model="newUser.changeCommissionFamiliaProfesional"
+                ></v-text-field>
+                <v-text-field
+                  label="Centro"
+                  v-model="newUser.changeCommissionIES"
+                ></v-text-field>
+                <v-text-field
+                  label="Ciudad"
+                  v-model="newUser.changeCommissionCity"
+                ></v-text-field>
+                <v-text-field
+                  label="Provincia"
+                  v-model="newUser.changeCommissionProvince"
+                ></v-text-field>
+              </template>
+              <v-btn class="me-4" type="submit" color="primary">Enviar</v-btn>
+              <v-btn class="me-4" type="button" @click="close">Cancelar</v-btn>
+            </v-form>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <DialogDelete
+      @close="close"
+      @accept="deleteItemConfirm"
+      v-model="dialogDelete"
+    ></DialogDelete>
     <v-snackbar color="error" elevation="24" v-model="snackbar" timeout="2000">
       {{ textSnackbar }}
     </v-snackbar>

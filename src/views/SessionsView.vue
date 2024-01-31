@@ -116,38 +116,6 @@
                 <v-icon size="large" class="me-2"> mdi-plus </v-icon>
                 Añadir
               </v-btn>
-              <v-dialog v-model="dialog" max-width="800px">
-                <template> </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-form @submit.prevent="createSession()" v-model="valid">
-                        <v-text-field
-                          label="Fecha"
-                          type="Date"
-                          :rules="[rules.required]"
-                          v-model="newSession.date"
-                        ></v-text-field>
-                        <v-btn class="me-4" type="submit" color="primary"
-                          >Enviar</v-btn
-                        >
-                        <v-btn class="me-4" type="button" @click="close"
-                          >Cancelar</v-btn
-                        >
-                      </v-form>
-                    </v-container>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
-              <DialogDelete
-                @close="close"
-                @accept="deleteItemConfirm"
-                v-model="dialogDelete"
-              ></DialogDelete>
             </v-toolbar>
           </template>
           <template v-slot:item.activities="{ item }">
@@ -181,6 +149,34 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" max-width="800px">
+      <template> </template>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">{{ formTitle }}</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-form @submit.prevent="createSession()" v-model="valid">
+              <v-text-field
+                label="Fecha"
+                type="Date"
+                :rules="[rules.required]"
+                v-model="newSession.date"
+              ></v-text-field>
+              <v-btn class="me-4" type="submit" color="primary">Enviar</v-btn>
+              <v-btn class="me-4" type="button" @click="close">Cancelar</v-btn>
+            </v-form>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <DialogDelete
+      @close="close"
+      @accept="deleteItemConfirm"
+      v-model="dialogDelete"
+    ></DialogDelete>
   </v-container>
 </template>
 
