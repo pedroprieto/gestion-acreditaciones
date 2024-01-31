@@ -67,7 +67,7 @@
                     label="Descripción"
                   ></v-textarea>
 
-                  <v-btn class="me-4" :type="submit" color="primary"
+                  <v-btn class="me-4" type="submit" color="primary"
                     >Enviar</v-btn
                   >
                   <v-btn class="me-4" type="button" @click="close"

@@ -112,7 +112,7 @@
                             v-model="newUser.changeCommissionProvince"
                           ></v-text-field>
                         </template>
-                        <v-btn class="me-4" :type="submit" color="primary"
+                        <v-btn class="me-4" type="submit" color="primary"
                           >Enviar</v-btn
                         >
                         <v-btn class="me-4" type="button" @click="close"
