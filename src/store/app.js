@@ -191,6 +191,9 @@ export const useAppStore = defineStore("app", {
       this.candidates.push(c);
     },
     deleteSession(session) {
+      for (let ac of this.listActivitiesBySession(session.id)) {
+        this.activities.splice(this.activities.indexOf(ac), 1);
+      }
       this.sessions.splice(this.sessions.indexOf(session), 1);
     },
     createSession(sessionData) {
