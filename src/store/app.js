@@ -55,10 +55,21 @@ export const useAppStore = defineStore("app", {
     ];
 
     let estado;
-
-    if (localStorage.getItem("peacState")) {
-      estado = JSON.parse(localStorage.getItem("peacState")).app;
-    } else {
+    try {
+      let existingState = {};
+      existingState = JSON.parse(localStorage.getItem("peacState")).app;
+      estado = {
+        info: existingState.info || {},
+        candidates: existingState.candidates || [],
+        sessions: existingState.sessions || [],
+        activities: existingState.activities || [],
+        UCs: existingState.UCs || [],
+        UCsAsesorables: existingState.UCsAsesorables || [],
+      };
+    } catch (e) {
+      alert(
+        "Ha ocurrido un error cargando los datos. Se reseteará la aplicación. Por favor, restaure los datos de una copia de seguridad válida.",
+      );
       estado = {
         info: {},
         candidates: [],
@@ -323,6 +334,20 @@ export const useAppStore = defineStore("app", {
       } else {
         return [];
       }
+    },
+    restoreData(backupData) {
+      localStorage.setItem("peacState", backupData);
+    },
+    backupData() {
+      let data = localStorage.getItem("peacState");
+      let today = new Date();
+      var blob = new Blob([data], {
+        type: "application/json;charset=utf-8",
+      });
+      saveAs(
+        blob,
+        `${today.toISOString()}-${this.info.name}_${this.info.familyName}.json`,
+      );
     },
 
     generarCertificados(tipo, candidate) {
