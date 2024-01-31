@@ -1,112 +1,108 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-data-table
-        :search="search"
-        :headers="headers"
-        :items="store.listUCsByCandidateId(candidate)"
-      >
-        <template v-slot:top>
-          <v-toolbar flat>
-            <v-toolbar-title>
-              UCs del candidato {{ candidateData.name }} -
-              {{ candidateData.familyName }}
-            </v-toolbar-title>
-            <v-text-field
-              v-model="search"
-              label="Buscar"
-              density="compact"
-              prepend-inner-icon="mdi-magnify"
-              single-line
-              hide-details
-              flat
-              variant="solo-filled"
-            ></v-text-field>
-            <v-divider class="mx-4" inset vertical></v-divider>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" @click="editItem()">
-              <v-icon size="large" class="me-2"> mdi-plus </v-icon>
-              Añadir
-            </v-btn>
-            <v-dialog v-model="dialog" max-width="800px">
-              <template> </template>
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">{{ formTitle }}</span>
-                </v-card-title>
+  <v-data-table
+    :search="search"
+    :headers="headers"
+    :items="store.listUCsByCandidateId(candidate)"
+  >
+    <template v-slot:top>
+      <v-toolbar flat>
+        <v-toolbar-title>
+          UCs de {{ candidateData.name }} -
+          {{ candidateData.familyName }}
+        </v-toolbar-title>
+        <v-text-field
+          v-model="search"
+          label="Buscar"
+          density="compact"
+          prepend-inner-icon="mdi-magnify"
+          single-line
+          hide-details
+          flat
+          variant="solo-filled"
+        ></v-text-field>
+        <v-divider class="mx-4" inset vertical></v-divider>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" dark class="mb-2" @click="editItem()">
+          <v-icon size="large" class="me-2"> mdi-plus </v-icon>
+          Añadir
+        </v-btn>
+        <v-dialog v-model="dialog" max-width="800px">
+          <template> </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">{{ formTitle }}</span>
+            </v-card-title>
 
-                <v-card-text>
-                  <v-container>
-                    <v-form @submit.prevent="createUC()" v-model="valid">
-                      <v-autocomplete
-                        v-if="!editedElement"
-                        label="UC"
-                        v-model="newUCId"
-                        item-title="fullName"
-                        item-value="id"
-                        :items="store.listUCsAsesorablesFullNamesIds()"
-                      ></v-autocomplete>
-                      <v-textarea
-                        v-model="newUC.evidence"
-                        label="Evidencias"
-                      ></v-textarea>
-                      <v-autocomplete
-                        label="Resultado"
-                        v-model="newUC.result"
-                        item-title="description"
-                        item-value="id"
-                        :items="store.listResultsByStage(candidateData.stage)"
-                      ></v-autocomplete>
-                      <v-textarea
-                        v-model="newUC.proposal"
-                        label="Observaciones / Propuesta formativa"
-                      ></v-textarea>
+            <v-card-text>
+              <v-container>
+                <v-form @submit.prevent="createUC()" v-model="valid">
+                  <v-autocomplete
+                    v-if="!editedElement"
+                    label="UC"
+                    v-model="newUCId"
+                    item-title="fullName"
+                    item-value="id"
+                    :items="store.listUCsAsesorablesFullNamesIds()"
+                  ></v-autocomplete>
+                  <v-textarea
+                    v-model="newUC.evidence"
+                    label="Evidencias"
+                  ></v-textarea>
+                  <v-autocomplete
+                    label="Resultado"
+                    v-model="newUC.result"
+                    item-title="description"
+                    item-value="id"
+                    :items="store.listResultsByStage(candidateData.stage)"
+                  ></v-autocomplete>
+                  <v-textarea
+                    v-model="newUC.proposal"
+                    label="Observaciones / Propuesta formativa"
+                  ></v-textarea>
 
-                      <v-btn class="me-4" :type="submit" color="primary"
-                        >Enviar</v-btn
-                      >
-                      <v-btn class="me-4" type="button" @click="close"
-                        >Cancelar</v-btn
-                      >
-                    </v-form>
-                  </v-container>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="500px">
-              <v-card>
-                <v-card-title class="text-h5"
-                  >¿Desea borrar este elemento?</v-card-title
-                >
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue-darken-1" variant="text" @click="close"
+                  <v-btn class="me-4" :type="submit" color="primary"
+                    >Enviar</v-btn
+                  >
+                  <v-btn class="me-4" type="button" @click="close"
                     >Cancelar</v-btn
                   >
-                  <v-btn
-                    color="blue-darken-1"
-                    variant="text"
-                    @click="deleteItemConfirm"
-                    >OK</v-btn
-                  >
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon size="small" class="me-2" @click="editItem(item)">
-            mdi-pencil
-          </v-icon>
-          <v-icon size="small" class="me-2" @click="deleteItem(item)">
-            mdi-delete
-          </v-icon>
-        </template>
-        <template v-slot:no-data> No hay UCs</template>
-      </v-data-table>
-    </v-row>
-  </v-container>
+                </v-form>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >¿Desea borrar este elemento?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue-darken-1" variant="text" @click="close"
+                >Cancelar</v-btn
+              >
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="deleteItemConfirm"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+    <template v-slot:item.actions="{ item }">
+      <v-icon size="small" class="me-2" @click="editItem(item)">
+        mdi-pencil
+      </v-icon>
+      <v-icon size="small" class="me-2" @click="deleteItem(item)">
+        mdi-delete
+      </v-icon>
+    </template>
+    <template v-slot:no-data> No hay UCs</template>
+  </v-data-table>
 </template>
 
 <script setup>

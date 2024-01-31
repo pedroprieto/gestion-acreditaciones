@@ -158,12 +158,6 @@
               mdi-check
             </v-icon>
           </template>
-
-          <template v-slot:item.UCs="{ item }">
-            <v-icon size="large" class="me-2" @click="navToUCs(item)">
-              mdi-format-list-bulleted
-            </v-icon>
-          </template>
           <template v-slot:item.documents="{ item }">
             <v-chip
               size="small"
@@ -298,18 +292,18 @@
     <v-row v-if="selectedItem && selectedItem.length">
       <v-col>
         <v-divider thickness="5" color="primary" class="mt-5 mb-5"></v-divider>
-        <v-card elevation="10">
-          <v-toolbar density="compact" flat>
-            <v-toolbar-title
-              >Actuaciones con el candidato
-              {{ selectedCandidateFullName }}</v-toolbar-title
-            >
-          </v-toolbar>
-          <v-data-table
-            :headers="headersActivities"
-            :items="selectedCandidateWithActivities"
+        <v-tabs color="deep-purple-accent-4" align-tabs="center">
+          <v-tab
+            v-for="route of candidateRoutes"
+            :to="{
+              name: route.name,
+              params: { candidate: selectedItem[0] },
+            }"
+            >{{ route.meta.prompt }}</v-tab
           >
-          </v-data-table>
+        </v-tabs>
+        <v-card elevation="10">
+          <router-view> </router-view>
         </v-card>
       </v-col>
     </v-row>
@@ -320,7 +314,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, computed } from "vue";
+import { ref, nextTick, computed, watch } from "vue";
 import { useAppStore } from "../store/app";
 import { useRouter } from "vue-router";
 
@@ -365,18 +359,8 @@ let headers = [
     sortable: false,
     align: "center",
   },
-  { key: "UCs", title: "UCs", sortable: false },
   { key: "documents", title: "Documentación", sortable: false },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
-];
-
-let headersActivities = [
-  { key: "date", title: "Fecha" },
-  { key: "stage", title: "Etapa", sortable: false },
-  { key: "description", title: "Descripción", sortable: false },
-  { key: "withCandidate", title: "Con candidato", sortable: false },
-  { key: "inPerson", title: "Presencial", sortable: false },
-  { key: "km", title: "Km", sortable: false },
 ];
 
 let rules = {
@@ -388,22 +372,22 @@ let rules = {
   },
 };
 
+const candidateRoutes = router
+  .getRoutes()
+  .filter((route) => route.meta && route.meta.candidateMenu);
+
 const filteredCandidates = computed(() => {
   if (hide.value) return store.listActiveCandidates();
 
   return store.candidates;
 });
 
-const selectedCandidateFullName = computed(() => {
-  if (selectedItem.value)
-    return store.getCandidateFullNameById(selectedItem.value[0]);
-  return "";
-});
-
-const selectedCandidateWithActivities = computed(() => {
-  if (selectedItem.value)
-    return store.listActivitiesByCandidateId(selectedItem.value[0]);
-  return null;
+watch(selectedItem, async (newValue, oldValue) => {
+  if (newValue.length) {
+    router.push({ name: "candidateUCs", params: { candidate: newValue[0] } });
+  } else {
+    router.push({ name: "candidates" });
+  }
 });
 
 function createCandidate() {
@@ -455,9 +439,5 @@ function hideItem(item) {
 function deleteItemConfirm() {
   store.deleteCandidate(editedElement);
   close();
-}
-
-function navToUCs(candidate) {
-  router.push({ name: "UCs", params: { candidate: candidate.id } });
 }
 </script>

@@ -38,6 +38,32 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "home" */ "@/views/CandidatesView.vue"),
         props: true,
+        children: [
+          {
+            path: "/:candidate/UCs",
+            name: "candidateUCs",
+            meta: {
+              prompt: "UCs",
+              candidateMenu: true,
+            },
+            component: () =>
+              import(/* webpackChunkName: "home" */ "@/views/UCsView.vue"),
+            props: true,
+          },
+          {
+            path: "/:candidate/activities",
+            name: "candidateActivities",
+            meta: {
+              prompt: "Actividades del candidato",
+              candidateMenu: true,
+            },
+            component: () =>
+              import(
+                /* webpackChunkName: "home" */ "@/views/CandidateActivitiesView.vue"
+              ),
+            props: true,
+          },
+        ],
       },
       {
         path: "/sessions",
@@ -73,16 +99,6 @@ const routes = [
           import(
             /* webpackChunkName: "home" */ "@/views/UCsAsesorablesView.vue"
           ),
-        props: true,
-      },
-      {
-        path: "/candidates/:candidate",
-        name: "UCs",
-        meta: {
-          prompt: "UCs",
-        },
-        component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/UCsView.vue"),
         props: true,
       },
     ],
