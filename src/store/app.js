@@ -368,7 +368,7 @@ export const useAppStore = defineStore("app", {
     },
 
     generarCertificados(tipo, candidate) {
-      let url = `${import.meta.env.BASE_URL}office_templates/${tipo}.docx`;
+      let url = `/office_templates/${tipo}.docx`;
       var generation_date = new Date().toLocaleDateString("es");
 
       let candidateFullName = `${candidate.name} ${candidate.familyName}`;
