@@ -291,6 +291,13 @@ export const useAppStore = defineStore("app", {
       this.activities.splice(this.activities.indexOf(activity), 1);
     },
     createUC(UCData, candidateId) {
+      if (this.getUCsByCandidateIdCode(UCData.code, candidateId)) {
+        this.error = true;
+        this.errorText =
+          "Ya hay una UC dada de alta con ese código para ese candidato";
+        return;
+      }
+
       let c = Object.assign(
         {
           id: uuidv4(),
@@ -333,6 +340,11 @@ export const useAppStore = defineStore("app", {
     },
     deleteUC(UC) {
       this.UCs.splice(this.UCs.indexOf(UC), 1);
+    },
+    getUCsByCandidateIdCode(code, candidateId) {
+      return this.UCs.find(
+        (uc) => uc.code == code && uc.candidateId == candidateId,
+      );
     },
     createUCAsesorable(UCData) {
       if (this.getUCAsesorableByCode(UCData.code)) {
