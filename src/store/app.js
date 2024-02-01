@@ -343,6 +343,9 @@ export const useAppStore = defineStore("app", {
       );
       this.UCsAsesorables.push(c);
     },
+    deleteUCAsesorable(UC) {
+      this.UCsAsesorables.splice(this.UCsAsesorables.indexOf(UC), 1);
+    },
     listUCsAsesorables() {
       return this.UCsAsesorables;
     },

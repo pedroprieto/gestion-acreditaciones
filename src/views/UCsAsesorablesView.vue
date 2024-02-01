@@ -150,7 +150,7 @@ function deleteItem(item) {
 }
 
 function deleteItemConfirm() {
-  store.deleteUC(editedElement);
+  store.deleteUCAsesorable(editedElement);
   close();
 }
 </script>
