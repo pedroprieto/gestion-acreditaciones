@@ -56,16 +56,27 @@ export const useAppStore = defineStore("app", {
 
     let estado;
     try {
-      let existingState = {};
-      existingState = JSON.parse(localStorage.getItem("peacState")).app;
-      estado = {
-        info: existingState.info || {},
-        candidates: existingState.candidates || [],
-        sessions: existingState.sessions || [],
-        activities: existingState.activities || [],
-        UCs: existingState.UCs || [],
-        UCsAsesorables: existingState.UCsAsesorables || [],
-      };
+      let existingData = JSON.parse(localStorage.getItem("peacState"));
+      if (!existingData) {
+        estado = {
+          info: {},
+          candidates: [],
+          sessions: [],
+          activities: [],
+          UCs: [],
+          UCsAsesorables: [],
+        };
+      } else {
+        let existingState = existingData.app;
+        estado = {
+          info: existingState.info || {},
+          candidates: existingState.candidates || [],
+          sessions: existingState.sessions || [],
+          activities: existingState.activities || [],
+          UCs: existingState.UCs || [],
+          UCsAsesorables: existingState.UCsAsesorables || [],
+        };
+      }
     } catch (e) {
       alert(
         "Ha ocurrido un error cargando los datos. Se reseteará la aplicación. Por favor, restaure los datos de una copia de seguridad válida.",
