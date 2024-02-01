@@ -373,14 +373,11 @@ export const useAppStore = defineStore("app", {
 
       let candidateFullName = `${candidate.name} ${candidate.familyName}`;
       PizZipUtils.getBinaryContent(url, (err, content) => {
-        console.log(err);
-        console.log(content);
         const zip = new PizZip(content);
         const doc = new Docxtemplater(zip, {
           paragraphLoop: true,
           linebreaks: true,
         });
-        console.log("aquí");
 
         let activities = this.listActivitiesByCandidateId(candidate.id);
         let candidateUCs = this.listUCsByCandidateId(candidate.id);
@@ -410,21 +407,16 @@ export const useAppStore = defineStore("app", {
           changeCommissionCity: candidate.changeCommissionCity,
           changeCommissionProvince: candidate.changeCommissionProvince,
         });
-        console.log("acá");
         doc.render();
 
-        console.log("postrender");
         const out = doc.getZip().generate({
           type: "blob",
           mimeType:
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
 
-        console.log("presave");
         // Output the document using Data-URI
         saveAs(out, `${tipo}-${candidate.familyName}_${candidate.name}.docx`);
-
-        console.log("postsave");
       });
     },
   },
