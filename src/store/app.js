@@ -335,6 +335,11 @@ export const useAppStore = defineStore("app", {
       this.UCs.splice(this.UCs.indexOf(UC), 1);
     },
     createUCAsesorable(UCData) {
+      if (this.getUCAsesorableByCode(UCData.code)) {
+        this.error = true;
+        this.errorText = "Ya hay una UC dada de alta con ese código";
+        return;
+      }
       let c = Object.assign(
         {
           id: uuidv4(),
@@ -351,6 +356,9 @@ export const useAppStore = defineStore("app", {
     },
     getUCAsesorableById(UCId) {
       return this.UCsAsesorables.find((uc) => uc.id == UCId);
+    },
+    getUCAsesorableByCode(code) {
+      return this.UCsAsesorables.find((uc) => uc.code == code);
     },
     listUCsAsesorablesFullNamesIds() {
       return this.listUCsAsesorables().map((uc) => {
