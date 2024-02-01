@@ -187,6 +187,12 @@ export const useAppStore = defineStore("app", {
       return this.stages.find((el) => el.value == value).title;
     },
     deleteCandidate(candidate) {
+      for (let ac of this.listActivitiesByCandidateId(candidate.id)) {
+        this.activities.splice(this.activities.indexOf(ac), 1);
+      }
+      for (let uc of this.listUCsByCandidateId(candidate.id)) {
+        this.UCs.splice(this.activities.indexOf(uc), 1);
+      }
       this.candidates.splice(this.candidates.indexOf(candidate), 1);
     },
     getCandidateById(candidateId) {
