@@ -94,7 +94,7 @@
           select-strategy="single"
           :search="search"
           :headers="headers"
-          :items="store.sessions"
+          :items="store.getSessionsByYearPeriod(store.year, store.period)"
           v-model="selectedItem"
         >
           <template v-slot:top>
@@ -235,6 +235,7 @@ watch(selectedItem, async (newValue, oldValue) => {
 });
 
 async function navigate() {
+  selectedItem.value = [];
   await nextTick();
   router.push({
     name: route.name,
