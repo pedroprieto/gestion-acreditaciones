@@ -92,8 +92,6 @@ import DialogDelete from "../components/DialogDelete";
 
 const store = useAppStore();
 
-let candidateData = store.getCandidateById(props.candidate);
-
 let newUC = ref({});
 let valid = ref(false);
 let dialog = ref(false);
@@ -120,6 +118,10 @@ let headers = [
 let rules = {
   required: (value) => !!value || "Obligatorio.",
 };
+
+const candidateData = computed(() => {
+  return store.getCandidateById(props.candidate);
+});
 
 function createUC() {
   if (valid.value) {

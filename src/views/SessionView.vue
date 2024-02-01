@@ -114,8 +114,6 @@ import DialogDelete from "../components/DialogDelete";
 
 const store = useAppStore();
 
-let sessionData = store.getSessionById(props.session);
-
 let newActivity = ref({});
 let valid = ref(false);
 let dialog = ref(false);
@@ -145,6 +143,10 @@ let rules = {
 
 const availableStages = computed(() => {
   return store.getAvailableStagesByCandidateId(newActivity.value.candidate);
+});
+
+const sessionData = computed(() => {
+  return store.getSessionById(props.session);
 });
 
 function createActivity() {
