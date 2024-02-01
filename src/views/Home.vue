@@ -28,11 +28,10 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>Almacenamiento de datos</v-list-item-title>
-                <v-list-item-subtitle
-                  >Los datos se almacenan en el navegador. Si se borran los
-                  datos del sitio (almacenamiento local/cookies), se perderán
-                  los datos. De igual modo, si se cambia de navegador o
-                  dispositivo, los datos no estarán disponibles.
+                <v-list-item-subtitle>
+                  Los datos <b>se almacenan en el navegador</b>: no se deben
+                  borrar los datos del sitio (almacenamiento local/cookies),
+                  usar otro navegador, o utilizar navegación de incógnito.
                 </v-list-item-subtitle>
               </v-list-item>
               <v-list-item>
