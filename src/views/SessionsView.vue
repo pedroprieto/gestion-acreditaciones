@@ -245,7 +245,7 @@ async function navigate() {
 function createSession() {
   if (valid.value) {
     if (editedElement) {
-      Object.assign(editedElement, newSession.value);
+      store.updateSession(editedElement, newSession.value);
     } else {
       store.createSession(newSession.value);
     }

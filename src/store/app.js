@@ -207,6 +207,12 @@ export const useAppStore = defineStore("app", {
       }
       this.sessions.splice(this.sessions.indexOf(session), 1);
     },
+    updateSession(session, newSessionData) {
+      for (let ac of this.listActivitiesBySession(session.id)) {
+        ac.date = newSessionData.date;
+      }
+      Object.assign(session, newSessionData);
+    },
     createSession(sessionData) {
       let c = Object.assign({ id: uuidv4(), active: true }, sessionData);
       c.activities = [
