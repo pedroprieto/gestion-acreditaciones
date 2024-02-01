@@ -52,6 +52,14 @@
                 </v-list-item-subtitle>
               </v-list-item>
             </v-list>
+            <iframe
+              style="width: 100%; aspect-ratio: 16/9"
+              src="https://www.youtube.com/embed/UypZaga6JE0?si=4gj9JcTpaTRnKEWv"
+              title="Gestión PEAC"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
           </v-card-text>
         </v-card>
       </v-col>
