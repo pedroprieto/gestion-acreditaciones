@@ -52,6 +52,11 @@
                 </v-list-item-subtitle>
               </v-list-item>
             </v-list>
+          </v-card-text>
+        </v-card>
+        <v-card class="mt-2">
+          <v-card-text>
+            <h3 class="text-h3 mt-2 mb-2 text-center">Tutorial de uso</h3>
             <iframe
               style="width: 100%; aspect-ratio: 16/9"
               src="https://www.youtube.com/embed/UypZaga6JE0?si=4gj9JcTpaTRnKEWv"
