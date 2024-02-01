@@ -99,6 +99,8 @@ export const useAppStore = defineStore("app", {
     estado.years = years;
     estado.year = currentYear;
     estado.period = 1;
+    estado.error = false;
+    estado.errorText = "";
     return estado;
   },
   actions: {
@@ -225,6 +227,12 @@ export const useAppStore = defineStore("app", {
       Object.assign(session, newSessionData);
     },
     createSession(sessionData) {
+      if (this.getSessionByDate(sessionData.date)) {
+        let err = new Error();
+        err.message = "Ya existe una sesión creada en esa fecha.";
+        throw err;
+      }
+
       let c = Object.assign({ id: uuidv4(), active: true }, sessionData);
       c.activities = [
         { stage: 10, numSessions: 0 },
@@ -235,6 +243,9 @@ export const useAppStore = defineStore("app", {
     },
     getSessionById(sessionId) {
       return this.sessions.find((s) => s.id == sessionId);
+    },
+    getSessionByDate(date) {
+      return this.sessions.find((s) => s.date == date);
     },
     listAllCandidates() {
       return this.candidates;

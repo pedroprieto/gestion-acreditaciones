@@ -248,7 +248,12 @@ function createSession() {
     if (editedElement) {
       store.updateSession(editedElement, newSession.value);
     } else {
-      store.createSession(newSession.value);
+      try {
+        store.createSession(newSession.value);
+      } catch (e) {
+        store.error = true;
+        store.errorText = e.message;
+      }
     }
     close();
   }

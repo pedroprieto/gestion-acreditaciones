@@ -281,9 +281,6 @@
       @accept="deleteItemConfirm"
       v-model="dialogDelete"
     ></DialogDelete>
-    <v-snackbar color="error" elevation="24" v-model="snackbar" timeout="2000">
-      {{ textSnackbar }}
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -304,12 +301,10 @@ let dialogDelete = ref(false);
 let text = ref("");
 let search = ref("");
 let hide = ref(true);
-let snackbar = ref(false);
 let selectedItem = ref([]);
 
 let editedElement = null;
 let formTitle;
-let textSnackbar = "";
 let headers = [
   {
     align: "start",
@@ -373,8 +368,8 @@ function createCandidate() {
       try {
         store.createCandidate(newUser.value);
       } catch (e) {
-        snackbar.value = true;
-        textSnackbar = e.message;
+        store.error = true;
+        store.errorText = e.message;
       }
     }
     close();
