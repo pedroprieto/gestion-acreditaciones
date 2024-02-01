@@ -44,6 +44,13 @@
                   datos.</v-list-item-subtitle
                 >
               </v-list-item>
+              <v-list-item>
+                <v-list-item-title>Responsabilidad</v-list-item-title>
+                <v-list-item-subtitle
+                  >Esta aplicación no sustituye a la documentación oficial. Solo
+                  es una herramienta para ayudar a generar dicha documentación.
+                </v-list-item-subtitle>
+              </v-list-item>
             </v-list>
           </v-card-text>
         </v-card>
