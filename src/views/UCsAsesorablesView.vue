@@ -52,14 +52,17 @@
             <v-form @submit.prevent="createUC()" v-model="valid">
               <v-text-field
                 label="Código UC"
+                :rules="[rules.required]"
                 v-model="newUC.code"
               ></v-text-field>
               <v-textarea
                 v-model="newUC.name"
+                :rules="[rules.required]"
                 label="Nombre de la UC"
               ></v-textarea>
               <v-text-field
-                label="Cualificaciones asociadas a esta UC"
+                label="Cualificaciones asociadas a esta UC, separadas por comas"
+                :rules="[rules.required]"
                 v-model="newUC.qualys"
               ></v-text-field>
 
@@ -101,6 +104,7 @@ let headers = [
     title: "Código UC",
   },
   { key: "name", title: "Nombre UC", sortable: false },
+  { key: "qualys", title: "Cualificaciones asociadas", sortable: false },
   { key: "actions", title: "Acciones", sortable: false, align: "end" },
 ];
 
