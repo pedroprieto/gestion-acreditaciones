@@ -207,9 +207,9 @@ export const useAppStore = defineStore("app", {
     },
     createCandidate(candidateData) {
       if (this.getCandidateByNIF(candidateData.nif)) {
-        let err = new Error();
-        err.message = "Ya existe un candidato con este NIF";
-        throw err;
+        this.error = true;
+        this.errorText = "Ya existe un candidato con este NIF";
+        return;
       }
       let c = Object.assign(
         {
@@ -234,9 +234,9 @@ export const useAppStore = defineStore("app", {
     },
     createSession(sessionData) {
       if (this.getSessionByDate(sessionData.date)) {
-        let err = new Error();
-        err.message = "Ya existe una sesión creada en esa fecha.";
-        throw err;
+        this.error = true;
+        this.errorText = "Ya existe una sesión creada en esa fecha";
+        return;
       }
 
       let c = Object.assign({ id: uuidv4(), active: true }, sessionData);
