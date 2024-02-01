@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="8">
+      <v-col md="8">
         <v-card>
           <v-card-title>
             <h2 class="text-h2 text-center">Gestión del PEAC</h2>
