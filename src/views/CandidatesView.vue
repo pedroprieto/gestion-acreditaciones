@@ -407,6 +407,7 @@ function hideItem(item) {
 }
 
 function deleteItemConfirm() {
+  selectedItem.value = [];
   store.deleteCandidate(editedElement);
   close();
 }

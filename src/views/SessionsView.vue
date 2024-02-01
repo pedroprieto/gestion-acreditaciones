@@ -290,6 +290,7 @@ function deleteItem(item) {
 }
 
 function deleteItemConfirm() {
+  selectedItem.value = [];
   store.deleteSession(editedElement);
   close();
 }
