@@ -101,6 +101,17 @@ const routes = [
           ),
         props: true,
       },
+      {
+        path: "/URLs",
+        name: "URLs",
+        meta: {
+          prompt: "URLs",
+          mainMenu: true,
+        },
+        component: () =>
+          import(/* webpackChunkName: "home" */ "@/views/URLs.vue"),
+        props: true,
+      },
     ],
   },
 ];

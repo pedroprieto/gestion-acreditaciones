@@ -33,6 +33,10 @@
                   label="Sede"
                   v-model="store.info.sede"
                 ></v-text-field>
+                <v-text-field
+                  label="Código comisión"
+                  v-model="store.info.commissionCode"
+                ></v-text-field>
                 <v-btn class="me-4" type="submit" color="primary">Volver</v-btn>
               </v-form>
             </v-container>
