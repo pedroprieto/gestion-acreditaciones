@@ -134,6 +134,7 @@ function createUC() {
       newUC.value.qualys = UCData.qualys;
       newUC.value.proposal = "";
       newUC.value.result = "";
+      newUC.value.evidence = "";
       store.createUC(newUC.value, props.candidate);
     }
     close();
