@@ -140,13 +140,17 @@ export const useAppStore = defineStore("app", {
       return numUCs;
     },
     getSessionsByYearPeriod(year, period) {
-      return this.sessions.filter((a) => {
-        let d = new Date(a.date);
-        return (
-          d >= this.getBeginDate(year, period) &&
-          d <= this.getEndDate(year, period)
-        );
-      });
+      return this.sessions
+        .filter((a) => {
+          let d = new Date(a.date);
+          return (
+            d >= this.getBeginDate(year, period) &&
+            d <= this.getEndDate(year, period)
+          );
+        })
+        .sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
     },
 
     getCurrentYear() {
