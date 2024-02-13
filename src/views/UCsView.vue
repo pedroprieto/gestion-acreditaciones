@@ -92,7 +92,7 @@ import DialogDelete from "../components/DialogDelete";
 
 const store = useAppStore();
 
-let newUC = ref({});
+let newUC = ref({ evidence: "", result: "", proposal: "" });
 let valid = ref(false);
 let dialog = ref(false);
 let dialogDelete = ref(false);
@@ -132,9 +132,6 @@ function createUC() {
       newUC.value.code = UCData.code;
       newUC.value.name = UCData.name;
       newUC.value.qualys = UCData.qualys;
-      newUC.value.proposal = "";
-      newUC.value.result = "";
-      newUC.value.evidence = "";
       store.createUC(newUC.value, props.candidate);
     }
     close();
@@ -146,7 +143,7 @@ async function close() {
   dialogDelete.value = false;
   await nextTick();
   editedElement = null;
-  newUC.value = {};
+  newUC.value = { evidence: "", result: "", proposal: "" };
   newUCId.value = "";
 }
 
@@ -154,7 +151,7 @@ function editItem(item) {
   if (!item) {
     formTitle = "Nuevo elemento";
     editedElement = null;
-    newUC.value = {};
+    newUC.value = { evidence: "", result: "", proposal: "" };
   } else {
     formTitle = "Editar elemento";
     editedElement = item;
