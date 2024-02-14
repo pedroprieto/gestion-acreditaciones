@@ -319,6 +319,9 @@ export const useAppStore = defineStore("app", {
     listActivitiesByCandidateId(candidateId) {
       return this.activities
         .filter((ac) => ac.candidate == candidateId)
+        .sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        })
         .map((ac) => ({
           stage: this.getActivityStageTitleByValue(ac.stage),
           date: new Date(ac.date).toLocaleDateString(),
@@ -326,10 +329,7 @@ export const useAppStore = defineStore("app", {
           inPerson: ac.inPerson ? "Sí" : "No",
           km: ac.km || "-",
           description: ac.description,
-        }))
-        .sort((a, b) => {
-          return new Date(a.date) - new Date(b.date);
-        });
+        }));
     },
 
     groupUCsByQualy(UCs) {
