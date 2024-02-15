@@ -109,6 +109,7 @@ let headers = [
     title: "Código UC",
   },
   { key: "name", title: "Nombre UC", sortable: false },
+  { key: "qualys", title: "Cualificaciones asociadas", sortable: false },
   { key: "proposal", title: "Propuesta", sortable: false },
   { key: "result", title: "Resultado", sortable: false },
   { key: "evidence", title: "Evidencias", sortable: false },
