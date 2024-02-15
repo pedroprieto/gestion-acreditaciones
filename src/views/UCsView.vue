@@ -28,6 +28,9 @@
         </v-btn>
       </v-toolbar>
     </template>
+    <template v-slot:item.qualys="{ item }">
+      {{ item.qualys.join(",") }}
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon size="small" class="me-2" @click="editItem(item)">
         mdi-pencil
