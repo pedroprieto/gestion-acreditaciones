@@ -1,16 +1,6 @@
 <template>
   <v-container>
     <v-row align="center">
-      <v-col offset-md="1" md="5"
-        >Asesoramiento - Evaluación - Ratificación</v-col
-      >
-      <v-col md="1" offset-md="4">
-        <v-btn block target="_blank" :href="link1" prepend-icon="mdi-link">
-          Ir</v-btn
-        >
-      </v-col>
-    </v-row>
-    <v-row align="center">
       <v-col md="5" offset-md="1"
         >Acta provisional de evaluación (Presidente/Secretari@)
       </v-col>
